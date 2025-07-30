@@ -6,15 +6,37 @@
 
 Construction teams need to manage tasks spatially on floor plans while working in environments with poor connectivity. Current solutions either lack spatial context or fail offline, creating friction in construction workflows.
 
+## DB Diagram
+
+[Link to DB Diagram](https://dbdiagram.io/d/Construction-task-manager-6889d82fcca18e685c695e73)
+
+
+## Task board
+
+[Link to Task board](https://www.notion.so/240f42bdb99b806da52dd6773bad6f66?v=240f42bdb99b80bb84fc000c22add8f6&source=copy_link)
+
+
+## Low fidelity mockups/wireframes
+
+[Link to Low-fidelity Wireframes](https://www.figma.com/design/BfzXWo0SkqSPBBD3YVK0Mc/Construction-Task-Manager?node-id=2-4&t=Zv0hfFTogTUmfkRc-1)
+
+
 ## 🔍 Solution Analysis
 
-| Approach | Pros | Cons | Verdict |
-|----------|------|------|---------|
-| **Generic Task Apps** | Simple, familiar | No spatial context, online-only | ❌ Wrong tool |
-| **CAD Software** | Professional precision | Complex, expensive, desktop-only | ❌ Overkill |
-| **Static Image + DOM** | Fast development | Poor performance, no real coordinates | ❌ Not scalable |
-| **Canvas-based Custom** | Full control, performant | High complexity, reinventing wheels | ⚠️ Over-engineered |
-| **LeafletJS + Canvas** | Professional mapping, proven, extensible | Learning curve | ✅ **Selected** |
+| Approach | Performance | Scalability | Precision | Development Time | Verdict |
+|----------|-------------|-------------|-----------|------------------|---------|
+| **Generic Task Apps** | Good for simple lists | Limited spatial context | No coordinate mapping | Fast | ❌ Wrong domain |
+| **CAD Software (AutoCAD Web)** | Excellent precision | Enterprise scale | Professional grade | Very slow | ❌ Overkill complexity |
+| **Static Image + SVG Overlay** | Poor with 100+ elements | Limited by DOM manipulation | Pixel-level only | Fast | ❌ Not scalable |
+| **Static Image + Absolute Positioned Markers** | Degrades with complex interactions | Poor memory management | Basic pixel positioning | Very fast | ❌ No real coordinates |
+| **HTML5 Canvas (Custom)** | Excellent with hardware acceleration | Handles thousands efficiently | Pixel-perfect control | Very slow | ⚠️ Reinventing wheels |
+| **React-Konva** | Very good React integration | Good with layer management | Sub-pixel precision | Medium | ✅ **Strong contender** |
+| **FabricJS** | Excellent interactive graphics | Good object management | High precision vector graphics | Medium | ✅ **Strong contender** |
+| **Paper.js** | Excellent vector animations | Good for illustrations | Mathematical vector precision | Medium | ⚠️ Creative-focused |
+| **PixiJS (Game Engine)** | Exceptional WebGL performance | Excellent with GPU acceleration | High precision coordinates | Slow | ⚠️ Overkill for 2D |
+| **LeafletJS + Canvas Overlay** | Optimized for mapping data | Enterprise GIS scale | Professional coordinate systems | Medium-Slow | ✅ **Selected** |
+| **OpenLayers** | Superior GIS performance | Handles massive datasets | Advanced CRS support | Slow | ⚠️ Over-engineered |
+| **D3.js + SVG** | Good for data visualization | Limited by SVG performance | Vector precision | Medium | ⚠️ Visualization-focused |
 
 ## 🗺️ Why LeafletJS + Canvas Overlay?
 
@@ -58,6 +80,7 @@ Construction teams need to manage tasks spatially on floor plans while working i
 - **Drawing Tools** (TBD) Canvas-based annotations and markup
 - **Professional UI** (TBD) Construction industry design patterns
 - **Comprehensive Testing** (TBD) Unit, integration, and E2E tests
+- **Storybook Setup** (TBD) - Component documentation and isolated development
 
 
 **Target: Production-ready construction tool**
