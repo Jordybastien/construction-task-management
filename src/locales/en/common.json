@@ -1,0 +1,14 @@
+{
+  "welcome": "Welcome",
+  "hello": "Hello World",
+  "description": "This is a construction task manager application",
+  "taskManager": "Task Manager",
+  "addTask": "Add Task",
+  "editTask": "Edit Task",
+  "deleteTask": "Delete Task",
+  "save": "Save",
+  "cancel": "Cancel",
+  "status": "Status",
+  "priority": "Priority",
+  "dueDate": "Due Date"
+}

@@ -1,0 +1,14 @@
+{
+  "welcome": "Willkommen",
+  "hello": "Hallo Welt",
+  "description": "Dies ist eine Aufgabenverwaltungsanwendung für das Bauwesen",
+  "taskManager": "Aufgabenverwalter",
+  "addTask": "Aufgabe hinzufügen",
+  "editTask": "Aufgabe bearbeiten",
+  "deleteTask": "Aufgabe löschen",
+  "save": "Speichern",
+  "cancel": "Abbrechen",
+  "status": "Status",
+  "priority": "Priorität",
+  "dueDate": "Fälligkeitsdatum"
+}
