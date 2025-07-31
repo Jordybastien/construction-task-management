@@ -1,4 +1,5 @@
-import { Outlet, NavLink } from 'react-router';
+import { useMemo } from 'react';
+import { Outlet, NavLink, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { setCookie } from '@/utils/cookies';
@@ -11,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ChevronRight, Bell, Settings, LogOut } from 'lucide-react';
 import CustomAvatar from '@/components/customAvatar';
+import { twMerge } from 'tailwind-merge';
 
 interface NavItem {
   to: string;
@@ -20,6 +22,7 @@ interface NavItem {
 
 const AuthLayout = () => {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
@@ -48,9 +51,15 @@ const AuthLayout = () => {
     },
   ];
 
+  // Check if current route is project details to apply full width
+  const isFullScreen = useMemo(
+    () => location.pathname.includes('/project/'),
+    [location]
+  );
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 border-b border-gray-100 bg-white">
+      <header className="sticky top-0 border-b border-gray-100 bg-white z-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-8">
@@ -151,7 +160,10 @@ const AuthLayout = () => {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+      <main
+        className={twMerge(
+          isFullScreen ? 'w-full' : 'mx-auto max-w-7xl py-6 sm:px-6 lg:px-8'
+        )}>
         <Outlet />
       </main>
     </div>

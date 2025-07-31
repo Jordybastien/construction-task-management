@@ -5,7 +5,6 @@ import deCommon from './locales/de/common.json';
 import { COOKIES_IDENTIFIERS } from './utils/constants';
 import { getCookie } from './utils/cookies';
 
-// Get language from cookie
 const getLanguageFromCookie = (): string => {
   return getCookie(COOKIES_IDENTIFIERS.APP_LOCALE) || 'en';
 };

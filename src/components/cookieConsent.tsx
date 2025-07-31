@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { COOKIES_IDENTIFIERS } from '@/utils/constants';
@@ -6,23 +6,22 @@ import { getCookie, setCookie } from '@/utils/cookies';
 
 const CookieConsent: React.FC = () => {
   const { t } = useTranslation();
-  const [isVisible, setIsVisible] = useState(false);
+  const [hasUserDecided, setHasUserDecided] = useState(false);
 
-  useEffect(() => {
+  const isVisible = useMemo(() => {
+    if (hasUserDecided) return false;
     const hasConsent = getCookie(COOKIES_IDENTIFIERS.COOKIE_CONSENT);
-    if (!hasConsent) {
-      setIsVisible(true);
-    }
-  }, []);
+    return !hasConsent;
+  }, [hasUserDecided]);
 
   const accept = () => {
     setCookie(COOKIES_IDENTIFIERS.COOKIE_CONSENT, 'true', 365);
-    setIsVisible(false);
+    setHasUserDecided(true);
   };
 
   const decline = () => {
     setCookie(COOKIES_IDENTIFIERS.COOKIE_CONSENT, 'false', 365);
-    setIsVisible(false);
+    setHasUserDecided(true);
   };
 
   if (!isVisible) {
