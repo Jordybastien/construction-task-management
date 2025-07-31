@@ -2,6 +2,13 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enCommon from './locales/en/common.json';
 import deCommon from './locales/de/common.json';
+import { COOKIES_IDENTIFIERS } from './utils/constants';
+import { getCookie } from './utils/cookies';
+
+// Get language from cookie
+const getLanguageFromCookie = (): string => {
+  return getCookie(COOKIES_IDENTIFIERS.APP_LOCALE) || 'en';
+};
 
 const resources = {
   en: {
@@ -14,7 +21,7 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'en',
+  lng: getLanguageFromCookie(),
   fallbackLng: 'en',
   defaultNS: 'common',
   interpolation: {

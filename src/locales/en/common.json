@@ -1,14 +1,98 @@
 {
-  "welcome": "Welcome",
-  "hello": "Hello World",
-  "description": "This is a construction task manager application",
-  "taskManager": "Task Manager",
-  "addTask": "Add Task",
-  "editTask": "Edit Task",
-  "deleteTask": "Delete Task",
-  "save": "Save",
-  "cancel": "Cancel",
-  "status": "Status",
-  "priority": "Priority",
-  "dueDate": "Due Date"
+  "PAGES": {
+    "LOGIN": {
+      "TITLE": "Login",
+      "DESCRIPTION": "Sign in to access the construction task manager",
+      "WELCOME_BACK": "Welcome back",
+      "TESTIMONIAL": "This construction task manager has revolutionized how we handle our projects. The efficiency gains are remarkable!",
+      "FORM": {
+        "NAME": {
+          "LABEL": "Name",
+          "PLACEHOLDER": "Enter your name",
+          "ERRORS": {
+            "INVALID": "Name must be at least 2 characters long"
+          }
+        },
+        "SIGN_IN": "Sign In"
+      }
+    },
+    "HOME": {
+      "TITLE": "Home",
+      "PROJECT_NAME": "Project",
+      "SAMPLE_DESCRIPTION": "Sample project description",
+      "HEADER": {
+        "APP_TITLE": "Construction Task Manager",
+        "WELCOME_USER": "Welcome, John Doe"
+      },
+      "PROJECT_SELECTION": {
+        "TITLE": "Select a Project",
+        "DESCRIPTION": "Choose an existing project or create a new one to start managing construction tasks"
+      },
+      "SEARCH": {
+        "PLACEHOLDER": "Search projects..."
+      },
+      "ACTIONS": {
+        "NEW_PROJECT": "NEW PROJECT",
+        "CREATE_PROJECT": "CREATE PROJECT"
+      },
+      "CREATE_PROJECT": {
+        "TITLE": "Create New Project",
+        "DESCRIPTION": "Start a new construction project with floor plans and task management"
+      }
+    },
+    "PROJECT_DETAILS": {
+      "TITLE": "Project Details",
+      "PROJECT_INFORMATION": "Project Information",
+      "DETAILS_ABOUT_PROJECT": "Details about project",
+      "PROJECT_NAME_LABEL": "Project name",
+      "SAMPLE_PROJECT": "Sample Project",
+      "STATUS_LABEL": "Status",
+      "IN_PROGRESS": "In Progress"
+    },
+    "NOT_FOUND": {
+      "TITLE": "Page Not Found",
+      "MESSAGE": "The page you are looking for does not exist."
+    }
+  },
+  "LAYOUTS": {
+    "HEADER": {
+      "APP_TITLE": "Construction Task Manager",
+      "NAVIGATION": {
+        "PROJECTS": "Projects",
+        "SETTINGS": "Settings",
+        "LOGOUT": "Logout"
+      }
+    }
+  },
+  "ATTRIBUTES": {
+    "PROJECT": {
+      "STATUS_ENUM": {
+        "ACTIVE": "Active",
+        "PLANNING": "Planning",
+        "ON_HOLD": "On Hold",
+        "COMPLETED": "Completed"
+      }
+    }
+  },
+  "COMPONENTS": {
+    "PROJECT_CARD": {
+      "TASKS": "tasks",
+      "PROGRESS": "Progress",
+      "LAST_UPDATED": "Last updated"
+    }
+  },
+  "COOKIE_CONSENT": {
+    "TITLE": "We use cookies",
+    "SUB_TEXT": "We use cookies to enhance your experience and analyze our traffic. By clicking 'Accept', you consent to our use of cookies."
+  },
+  "HELPERS": {
+    "ACTIONS": {
+      "ACCEPT": "Accept",
+      "DECLINE": "Decline"
+    }
+  },
+  "LOCALES": {
+    "EN": "English",
+    "DE": "Deutsch"
+  }
 }
