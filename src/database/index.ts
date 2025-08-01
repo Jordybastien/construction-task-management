@@ -121,27 +121,34 @@ export async function createDatabase(userId: string): Promise<Database> {
       schema: userSchema,
       localDocuments: true,
     },
-    // projects: {
-    //   schema: projectSchema,
-    // },
-    // project_users: {
-    //   schema: projectUserSchema,
-    // },
-    // floor_plans: {
-    //   schema: floorPlanSchema,
-    // },
-    // rooms: {
-    //   schema: roomSchema,
-    // },
-    // tasks: {
-    //   schema: taskSchema,
-    // },
-    // checklist_items: {
-    //   schema: checklistItemSchema,
-    // },
-    // task_comments: {
-    //   schema: taskCommentSchema,
-    // },
+    projects: {
+      schema: projectSchema,
+      migrationStrategies: {
+        1: function (oldDoc: any) {
+          // Add default status to existing projects
+          oldDoc.status = 'planning';
+          return oldDoc;
+        }
+      }
+    },
+    project_users: {
+      schema: projectUserSchema,
+    },
+    floor_plans: {
+      schema: floorPlanSchema,
+    },
+    rooms: {
+      schema: roomSchema,
+    },
+    tasks: {
+      schema: taskSchema,
+    },
+    checklist_items: {
+      schema: checklistItemSchema,
+    },
+    task_comments: {
+      schema: taskCommentSchema,
+    },
   });
 
   // Replication disabled - no backend server

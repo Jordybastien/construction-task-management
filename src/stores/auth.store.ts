@@ -50,6 +50,8 @@ const useAuthStore = create<AuthState & AuthActions>()(
         await databaseManager.close();
         resetDatabaseServices();
         deleteToken();
+        // No need to manually clear Zustand stores - window.location.href 
+        // reloads the page which clears all memory state automatically
         window.location.href = '/';
       },
 

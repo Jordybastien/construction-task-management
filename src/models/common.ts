@@ -5,3 +5,10 @@ export interface RouteProps {
   protected: boolean;
   element: ReactNode;
 }
+
+export enum EntityActions {
+  EDIT = 'edit',
+  VIEW = 'view',
+  ADD = 'add',
+  DELETE = 'delete',
+}

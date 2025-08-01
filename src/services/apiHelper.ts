@@ -3,6 +3,8 @@ import type { DatabaseServices } from '@/database/services';
 import { createDatabase } from '@/database';
 import { DatabaseServices as DbServices } from '@/database/services';
 import databaseManager from '@/database/manager';
+import { formatApiErrorResponse } from '@/utils/errorHandler';
+import { LOCAL_STORAGE_IDENTIFIERS } from '@/utils/constants';
 
 let dbServices: DatabaseServices | null = null;
 
@@ -11,13 +13,27 @@ const ensureDatabaseInitialized = async (): Promise<DatabaseServices> => {
     return dbServices;
   }
 
-  const userId = databaseManager.getCurrentUserId();
+  let userId = databaseManager.getCurrentUserId();
+
+  // If no user in memory, get from localStorage (handles page reload)
+  if (!userId) {
+    const storedUser = localStorage.getItem(
+      LOCAL_STORAGE_IDENTIFIERS.USER_STORE_KEY
+    );
+    const user = storedUser ? JSON.parse(storedUser) : null;
+
+    // user from current session
+    if (user?.name) {
+      await databaseManager.switchUserByName(user.name);
+      userId = databaseManager.getCurrentUserId();
+    }
+  }
+
   if (!userId) {
     throw new Error('No user authenticated - cannot initialize database');
   }
 
   const database = await createDatabase(userId);
-
   dbServices = new DbServices(database);
   return dbServices;
 };
@@ -36,7 +52,6 @@ const withApi = async <T>(
       const db = await ensureDatabaseInitialized();
       return await fallbackFn(db);
     } catch (error) {
-      const { formatApiErrorResponse } = await import('@/utils/errorHandler');
       throw formatApiErrorResponse(error);
     }
   }

@@ -109,6 +109,7 @@ Build:        Vite
 
 ## 🚀 Future Enhancements(if time was not a problem)
 
+- **Setup CI/CD** With the help of github actions
 - **Real-time Collaboration** WebSocket-based multi-user editing
 - **Mobile App** React Native or Flutter with offline sync
 - **Advanced Measurements** Area calculations, angle measurements

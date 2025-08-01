@@ -18,7 +18,7 @@ const TasksList = ({ tasks, selectedTask, onTaskSelect }: TasksListProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto border-gray-200 bg-white">
+    <div className="flex h-full flex-col lg:overflow-y-auto border-gray-200 bg-white">
       <div className="flex flex-col gap-y-4 border-b p-4">
         <div className="flex items-center justify-between">
           <Typography as="h4">
@@ -40,7 +40,7 @@ const TasksList = ({ tasks, selectedTask, onTaskSelect }: TasksListProps) => {
         </div>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-4 pb-24">
+      <div className="flex-1 space-y-3 lg:overflow-y-auto px-4 pt-4 lg:pb-24">
         {tasks.map((task) => (
           <TaskCard
             key={task.id}

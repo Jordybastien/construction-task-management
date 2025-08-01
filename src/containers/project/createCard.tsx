@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 
-const CreateProjectCard: React.FC = () => {
+const CreateProjectCard = ({ onAddProject }: { onAddProject: () => void }) => {
   const { t } = useTranslation();
 
   return (
@@ -24,7 +24,7 @@ const CreateProjectCard: React.FC = () => {
             </p>
           </div>
 
-          <Button className="mt-4">
+          <Button className="mt-4" onClick={onAddProject}>
             <Plus className="h-4 w-4" />
             {t('PAGES.HOME.ACTIONS.CREATE_PROJECT')}
           </Button>

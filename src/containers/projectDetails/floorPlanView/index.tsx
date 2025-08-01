@@ -22,11 +22,36 @@ const FloorPlanView = () => {
       assignee: 'Mike',
       lastUpdated: '2d ago',
       checklist: [
-        { id: 1, text: 'Remove old fixtures', status: TaskStatus.DONE, completed: true },
-        { id: 2, text: 'Install plumbing', status: TaskStatus.DONE, completed: true },
-        { id: 3, text: 'Mount toilet', status: TaskStatus.IN_PROGRESS, completed: false },
-        { id: 4, text: 'Install sink', status: TaskStatus.NOT_STARTED, completed: false },
-        { id: 5, text: 'Final inspection', status: TaskStatus.NOT_STARTED, completed: false },
+        {
+          id: 1,
+          text: 'Remove old fixtures',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 2,
+          text: 'Install plumbing',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 3,
+          text: 'Mount toilet',
+          status: TaskStatus.IN_PROGRESS,
+          completed: false,
+        },
+        {
+          id: 4,
+          text: 'Install sink',
+          status: TaskStatus.NOT_STARTED,
+          completed: false,
+        },
+        {
+          id: 5,
+          text: 'Final inspection',
+          status: TaskStatus.NOT_STARTED,
+          completed: false,
+        },
       ],
     },
     {
@@ -41,11 +66,36 @@ const FloorPlanView = () => {
       assignee: 'Sarah',
       lastUpdated: '2d ago',
       checklist: [
-        { id: 1, text: 'Install outlets', status: TaskStatus.DONE, completed: true },
-        { id: 2, text: 'Wire switches', status: TaskStatus.DONE, completed: true },
-        { id: 3, text: 'Test circuits', status: TaskStatus.BLOCKED, completed: false },
-        { id: 4, text: 'Install fixtures', status: TaskStatus.NOT_STARTED, completed: false },
-        { id: 5, text: 'Final inspection', status: TaskStatus.NOT_STARTED, completed: false },
+        {
+          id: 1,
+          text: 'Install outlets',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 2,
+          text: 'Wire switches',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 3,
+          text: 'Test circuits',
+          status: TaskStatus.BLOCKED,
+          completed: false,
+        },
+        {
+          id: 4,
+          text: 'Install fixtures',
+          status: TaskStatus.NOT_STARTED,
+          completed: false,
+        },
+        {
+          id: 5,
+          text: 'Final inspection',
+          status: TaskStatus.NOT_STARTED,
+          completed: false,
+        },
       ],
     },
     {
@@ -60,11 +110,31 @@ const FloorPlanView = () => {
       assignee: 'John',
       lastUpdated: '1d ago',
       checklist: [
-        { id: 1, text: 'Remove old flooring', status: TaskStatus.DONE, completed: true },
-        { id: 2, text: 'Install underlayment', status: TaskStatus.DONE, completed: true },
+        {
+          id: 1,
+          text: 'Remove old flooring',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 2,
+          text: 'Install underlayment',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
         { id: 3, text: 'Lay tiles', status: TaskStatus.DONE, completed: true },
-        { id: 4, text: 'Grout tiles', status: TaskStatus.IN_PROGRESS, completed: false },
-        { id: 5, text: 'Seal grout', status: TaskStatus.NOT_STARTED, completed: false },
+        {
+          id: 4,
+          text: 'Grout tiles',
+          status: TaskStatus.IN_PROGRESS,
+          completed: false,
+        },
+        {
+          id: 5,
+          text: 'Seal grout',
+          status: TaskStatus.NOT_STARTED,
+          completed: false,
+        },
       ],
     },
     {
@@ -79,11 +149,36 @@ const FloorPlanView = () => {
       assignee: 'Mike',
       lastUpdated: '3d ago',
       checklist: [
-        { id: 1, text: 'Prepare surfaces', status: TaskStatus.DONE, completed: true },
-        { id: 2, text: 'Apply primer', status: TaskStatus.DONE, completed: true },
-        { id: 3, text: 'Paint first coat', status: TaskStatus.DONE, completed: true },
-        { id: 4, text: 'Paint second coat', status: TaskStatus.DONE, completed: true },
-        { id: 5, text: 'Touch up', status: TaskStatus.FINAL_CHECK, completed: false },
+        {
+          id: 1,
+          text: 'Prepare surfaces',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 2,
+          text: 'Apply primer',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 3,
+          text: 'Paint first coat',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 4,
+          text: 'Paint second coat',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 5,
+          text: 'Touch up',
+          status: TaskStatus.FINAL_CHECK,
+          completed: false,
+        },
       ],
     },
     {
@@ -98,23 +193,48 @@ const FloorPlanView = () => {
       assignee: 'Sarah',
       lastUpdated: '1d ago',
       checklist: [
-        { id: 1, text: 'Measure space', status: TaskStatus.DONE, completed: true },
-        { id: 2, text: 'Install brackets', status: TaskStatus.DONE, completed: true },
-        { id: 3, text: 'Mount cabinets', status: TaskStatus.DONE, completed: true },
-        { id: 4, text: 'Install hardware', status: TaskStatus.DONE, completed: true },
-        { id: 5, text: 'Final inspection', status: TaskStatus.DONE, completed: true },
+        {
+          id: 1,
+          text: 'Measure space',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 2,
+          text: 'Install brackets',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 3,
+          text: 'Mount cabinets',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 4,
+          text: 'Install hardware',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
+        {
+          id: 5,
+          text: 'Final inspection',
+          status: TaskStatus.DONE,
+          completed: true,
+        },
       ],
     },
   ];
 
   return (
-    <div className="grid h-full grid-cols-[20rem_1fr_20rem] divide-x divide-gray-200 overflow-y-hidden">
-      <TasksList 
-        tasks={tasks} 
-        selectedTask={selectedTask} 
-        onTaskSelect={setSelectedTask} 
+    <div className="grid h-full grid-cols-1 divide-x divide-gray-200 lg:grid-cols-[20rem_1fr_20rem] lg:overflow-y-hidden">
+      <TasksList
+        tasks={tasks}
+        selectedTask={selectedTask}
+        onTaskSelect={setSelectedTask}
       />
-      <FloorPlanArea className="sticky top-40" />
+      <FloorPlanArea className="hidden lg:block lg:sticky lg:top-40" />
       <TaskDetails selectedTask={selectedTask} />
     </div>
   );

@@ -34,6 +34,7 @@ export const projectUserSchema: RxJsonSchema<ProjectUserDocType> = {
       type: 'string',
       enum: Object.values(ProjectRole),
       default: ProjectRole.MEMBER,
+      maxLength: 36,
     },
     created_at: {
       type: 'string',
@@ -47,7 +48,6 @@ export const projectUserSchema: RxJsonSchema<ProjectUserDocType> = {
     ['project_id', 'user_id'],
     ['user_id', 'role'],
   ],
-  keyCompression: true,
 };
 
 export type ProjectUserDocument = RxDocument<ProjectUserDocType>;

@@ -40,16 +40,19 @@ export const checklistItemSchema: RxJsonSchema<ChecklistItemDocType> = {
       type: 'string',
       enum: Object.values(TaskStatus),
       default: TaskStatus.NOT_STARTED,
+      maxLength: 36,
     },
     order_index: {
       type: 'number',
       minimum: 0,
       maximum: 1000,
       default: 0,
+      multipleOf: 1,
     },
     completed_at: {
       type: 'string',
       format: 'date-time',
+      maxLength: 36,
     },
   },
   required: [
