@@ -1,8 +1,24 @@
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router';
+import AppLoading from '@/components/appLoading';
+import { isUserAuthenticated } from '@/stores/auth.store';
+import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 const AuthLayout = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const isAuthenticated = isUserAuthenticated();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/home');
+    }
+  }, [isAuthenticated]);
+
+  if (isAuthenticated) {
+    return <AppLoading />;
+  }
 
   return (
     <div className="min-h-full lg:grid lg:min-h-screen lg:grid-cols-5">
