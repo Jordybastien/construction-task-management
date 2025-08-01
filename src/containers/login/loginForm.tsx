@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -21,9 +21,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useLogin } from '@/hooks/useLogin';
+import { useNavigate } from 'react-router';
 
 const LoginForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const formSchema = z.object({
     name: z.string().min(2, {
@@ -38,12 +43,28 @@ const LoginForm = () => {
     },
   });
 
+  const { mutate: login, isLoading } = useLogin({
+    onSuccess: () => {
+      navigate('/home');
+    },
+    onError: (error) => {
+      setErrorMessage(error?.message || 'Unable to login');
+    },
+  });
+
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Form submitted with values:', values);
+    setErrorMessage('');
+    login({ name: values.name });
   };
 
   return (
     <div className="flex w-full flex-col gap-y-4 lg:gap-y-6">
+      {errorMessage && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertTitle>{t('ERRORS.UNABLE_TO_PROCEED')}</AlertTitle>
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-8 gap-y-4 py-4">
@@ -75,7 +96,7 @@ const LoginForm = () => {
               </div>
             </div>
             <div className="w-full">
-              <Button type="submit" className="min-w-full">
+              <Button type="submit" className="min-w-full" loading={isLoading}>
                 {t('PAGES.LOGIN.FORM.SIGN_IN')}
               </Button>
             </div>

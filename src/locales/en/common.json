@@ -164,5 +164,8 @@
   "LOCALES": {
     "EN": "English",
     "DE": "Deutsch"
+  },
+  "ERRORS": {
+    "UNABLE_TO_PROCEED": "Unable to proceed"
   }
 }

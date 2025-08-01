@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -10,44 +10,70 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronRight, Bell, Settings, LogOut } from 'lucide-react';
+import {
+  ChevronRight,
+  Bell,
+  Settings,
+  LogOut,
+  FolderOpen,
+  FileText,
+} from 'lucide-react';
 import CustomAvatar from '@/components/customAvatar';
 import { twMerge } from 'tailwind-merge';
+import { useNavigate } from 'react-router';
+import AppLoading from '@/components/appLoading';
+import {
+  isUserAuthenticated,
+  useLogoutUser,
+  useCurrentUser,
+} from '@/stores/auth.store';
 
 interface NavItem {
   to: string;
   label: string;
   translationKey?: string;
+  icon: React.ComponentType<{ size?: number }>;
 }
 
 const AuthLayout = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const navigate = useNavigate();
+  const isAuthenticated = isUserAuthenticated();
+  const logoutUser = useLogoutUser();
+  const currentUser = useCurrentUser();
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
     setCookie(COOKIES_IDENTIFIERS.APP_LOCALE, language, 365);
   };
-  // TODO: This is temporary
-  // const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
 
-  // if (!isAuthenticated) {
-  //   return <Navigate to="/" replace />;
-  // }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return <AppLoading />;
+  }
 
   const navItems: NavItem[] = [
     {
       to: '/home',
       label: 'Projects',
       translationKey: 'LAYOUTS.HEADER.NAVIGATION.PROJECTS',
+      icon: FolderOpen,
     },
     {
       to: '/reports',
       label: 'Reports',
+      icon: FileText,
     },
     {
       to: '/settings',
       label: 'Settings',
+      icon: Settings,
     },
   ];
 
@@ -59,7 +85,7 @@ const AuthLayout = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="sticky top-0 border-b border-gray-100 bg-white z-20">
+      <header className="sticky top-0 z-20 border-b border-gray-100 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-8">
@@ -78,20 +104,28 @@ const AuthLayout = () => {
               </div>
 
               <nav className="hidden space-x-8 md:flex">
-                {navItems.map((item) => (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `rounded-md px-4 py-2 text-sm font-medium transition-colors ${
-                        isActive
-                          ? 'bg-primary/5 text-primary'
-                          : 'text-gray-600 hover:text-gray-900'
-                      }`
-                    }>
-                    {item.translationKey ? t(item.translationKey) : item.label}
-                  </NavLink>
-                ))}
+                {navItems.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      className={({ isActive }) =>
+                        `flex items-center space-x-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+                          isActive
+                            ? 'bg-primary/5 text-primary'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`
+                      }>
+                      <IconComponent size={12} />
+                      <span>
+                        {item.translationKey
+                          ? t(item.translationKey)
+                          : item.label}
+                      </span>
+                    </NavLink>
+                  );
+                })}
               </nav>
             </div>
 
@@ -132,14 +166,17 @@ const AuthLayout = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="!py-1 hover:bg-gray-50">
-                    <CustomAvatar name="John Doe" size="md" />
+                    <CustomAvatar
+                      name={currentUser?.name as string}
+                      size="md"
+                    />
                     <div className="hidden text-left sm:block">
                       <p className="max-w-[70px] truncate text-sm font-medium text-gray-900 lg:max-w-[110px]">
-                        John Doe
+                        {currentUser?.name}
                       </p>
-                      <p className="max-w-[70px] truncate text-xs text-gray-500 lg:max-w-[110px]">
-                        john@example.com
-                      </p>
+                      {/* <p className="max-w-[70px] truncate text-xs text-gray-500 lg:max-w-[110px]">
+                        other user detail here
+                      </p> */}
                     </div>
                     <ChevronRight className="h-4 w-4 rotate-90" />
                   </Button>
@@ -149,7 +186,7 @@ const AuthLayout = () => {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>{t('LAYOUTS.HEADER.NAVIGATION.SETTINGS')}</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={logoutUser}>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>{t('LAYOUTS.HEADER.NAVIGATION.LOGOUT')}</span>
                   </DropdownMenuItem>
