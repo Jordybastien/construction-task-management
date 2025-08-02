@@ -90,7 +90,9 @@ const AuthLayout = () => {
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center space-x-8">
               {/* TODO: Replace with logo */}
-              <div className="flex flex-row items-center gap-x-4 border-r border-gray-100 pr-8">
+              <div
+                className="flex cursor-pointer flex-row items-center gap-x-4 border-r border-gray-100 pr-8"
+                onClick={() => navigate('/home')}>
                 <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-200">
                   <span className="text-xs font-medium text-gray-600">
                     LOGO
@@ -199,7 +201,7 @@ const AuthLayout = () => {
 
       <main
         className={twMerge(
-          isFullScreen ? 'w-full' : 'mx-auto max-w-7xl py-6 px-4 lg:px-8'
+          isFullScreen ? 'w-full' : 'mx-auto max-w-7xl px-4 py-6 lg:px-8'
         )}>
         <Outlet />
       </main>
