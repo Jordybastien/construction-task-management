@@ -1,6 +1,11 @@
 import { BaseService } from './base.service';
 import type { TaskDocument } from '../schemas/task.schema';
-import type { Task, CreateTaskDto, UpdateTaskDto, TaskProgress } from '../dtos/task.dto';
+import type {
+  Task,
+  CreateTaskDto,
+  UpdateTaskDto,
+  TaskProgress,
+} from '../dtos/task.dto';
 import { TaskStatus } from '../schemas/base.schema';
 import { DatabaseError } from '../errors/database-error';
 
@@ -11,7 +16,7 @@ export class TaskService extends BaseService {
         id: this.generateId(),
         ...dto,
         status: TaskStatus.NOT_STARTED,
-        ...this.createAuditTrail()
+        ...this.createAuditTrail(),
       };
 
       return await this.db.tasks.insert(taskData);
@@ -33,7 +38,7 @@ export class TaskService extends BaseService {
       return await this.db.tasks
         .find({
           selector: { room_id: roomId },
-          sort: [{ created_at: 'desc' }]
+          sort: [{ created_at: 'desc' }],
         })
         .exec();
     } catch (error) {
@@ -46,7 +51,7 @@ export class TaskService extends BaseService {
       return await this.db.tasks
         .find({
           selector: { status },
-          sort: [{ created_at: 'desc' }]
+          sort: [{ created_at: 'desc' }],
         })
         .exec();
     } catch (error) {
@@ -59,7 +64,7 @@ export class TaskService extends BaseService {
       return await this.db.tasks
         .find({
           selector: { assigned_to: userId },
-          sort: [{ created_at: 'desc' }]
+          sort: [{ created_at: 'desc' }],
         })
         .exec();
     } catch (error) {
@@ -76,7 +81,7 @@ export class TaskService extends BaseService {
 
       const updateData: any = {
         ...dto,
-        ...this.updateAuditTrail()
+        ...this.updateAuditTrail(),
       };
 
       if (dto.status === TaskStatus.DONE && task.status !== TaskStatus.DONE) {
@@ -84,14 +89,17 @@ export class TaskService extends BaseService {
       }
 
       return await task.update({
-        $set: updateData
+        $set: updateData,
       });
     } catch (error) {
       this.handleError(error, 'updateTask');
     }
   }
 
-  async updateTaskStatus(id: string, status: TaskStatus): Promise<TaskDocument> {
+  async updateTaskStatus(
+    id: string,
+    status: TaskStatus
+  ): Promise<TaskDocument> {
     return this.updateTask(id, { status });
   }
 
@@ -102,13 +110,12 @@ export class TaskService extends BaseService {
         return false;
       }
 
+      // TODO: There should be a simpler function to delete all dependents
       await this.db.checklist_items
         .find({ selector: { task_id: id } })
         .remove();
 
-      await this.db.task_comments
-        .find({ selector: { task_id: id } })
-        .remove();
+      await this.db.task_comments.find({ selector: { task_id: id } }).remove();
 
       await task.remove();
       return true;
@@ -121,12 +128,14 @@ export class TaskService extends BaseService {
     try {
       const checklistItems = await this.db.checklist_items
         .find({
-          selector: { task_id: taskId }
+          selector: { task_id: taskId },
         })
         .exec();
 
       const total = checklistItems.length;
-      const completed = checklistItems.filter(item => item.status === TaskStatus.DONE).length;
+      const completed = checklistItems.filter(
+        (item) => item.status === TaskStatus.DONE
+      ).length;
       const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
       return { completed, total, percentage };

@@ -57,6 +57,7 @@ export const floorPlanSchema: RxJsonSchema<FloorPlanDocType> = {
       minimum: -10,
       maximum: 100,
       default: 0,
+      multipleOf: 1,
     },
   },
   required: [

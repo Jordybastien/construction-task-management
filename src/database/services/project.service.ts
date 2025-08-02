@@ -1,7 +1,7 @@
 import { BaseService } from './base.service';
-import type { ProjectDocument } from '../schemas/project.schema';
+import type { ProjectDocument, ProjectWithStats } from '../schemas/project.schema';
 import type { Project, CreateProjectDto, UpdateProjectDto, ProjectUser } from '../dtos/project.dto';
-import { ProjectRole } from '../schemas/base.schema';
+import { ProjectRole, ProjectStatus } from '../schemas/base.schema';
 import { DatabaseError } from '../errors/database-error';
 
 export class ProjectService extends BaseService {
@@ -10,6 +10,7 @@ export class ProjectService extends BaseService {
       const projectData: Project = {
         id: this.generateId(),
         ...dto,
+        status: dto.status || ProjectStatus.PLANNING,
         ...this.createAuditTrail()
       };
 
@@ -51,6 +52,28 @@ export class ProjectService extends BaseService {
         .exec();
     } catch (error) {
       this.handleError(error, 'findProjectsByUser');
+    }
+  }
+
+  async findProjectsByUserWithStats(userId: string): Promise<ProjectWithStats[]> {
+    try {
+      const projects = await this.findProjectsByUser(userId);
+      const projectsWithStats: ProjectWithStats[] = [];
+
+      for (const projectDoc of projects) {
+        const project = projectDoc.toJSON();
+        const stats = await this.getProjectStats(project.id);
+        
+        projectsWithStats.push({
+          ...project,
+          taskCount: stats.taskCount,
+          progress: stats.progress,
+        });
+      }
+
+      return projectsWithStats;
+    } catch (error) {
+      this.handleError(error, 'findProjectsByUserWithStats');
     }
   }
 
@@ -124,6 +147,70 @@ export class ProjectService extends BaseService {
       return projectUser?.role || null;
     } catch (error) {
       this.handleError(error, 'getUserRole');
+    }
+  }
+
+  async getProjectStats(projectId: string): Promise<{ taskCount: number; progress: number }> {
+    try {
+      // Get all floor plans for this project
+      const floorPlans = await this.db.floor_plans
+        .find({
+          selector: { project_id: projectId }
+        })
+        .exec();
+
+      const floorPlanIds = floorPlans.map(fp => fp.id);
+      
+      // Get all rooms for these floor plans
+      const rooms = await this.db.rooms
+        .find({
+          selector: {
+            floor_plan_id: { $in: floorPlanIds }
+          }
+        })
+        .exec();
+
+      const roomIds = rooms.map(room => room.id);
+      
+      // Get all tasks for these rooms
+      const tasks = await this.db.tasks
+        .find({
+          selector: {
+            room_id: { $in: roomIds }
+          }
+        })
+        .exec();
+
+      const taskCount = tasks.length;
+      
+      if (taskCount === 0) {
+        return { taskCount: 0, progress: 0 };
+      }
+
+      // Calculate average progress across all tasks
+      let totalProgress = 0;
+      
+      for (const task of tasks) {
+        const checklistItems = await this.db.checklist_items
+          .find({
+            selector: { task_id: task.id }
+          })
+          .exec();
+
+        const completedItems = checklistItems.filter(item => item.status === 'done').length;
+        const taskProgress = checklistItems.length > 0 
+          ? (completedItems / checklistItems.length) * 100 
+          : 0;
+          
+        totalProgress += taskProgress;
+      }
+
+      const averageProgress = Math.round(totalProgress / taskCount);
+      
+      return { taskCount, progress: averageProgress };
+    } catch (error) {
+      this.handleError(error, 'getProjectStats');
+      return { taskCount: 0, progress: 0 };
     }
   }
 }

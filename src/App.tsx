@@ -4,6 +4,7 @@ import AppRoutes from '@/router/routes';
 import CookieConsent from '@/components/cookieConsent';
 import { useInitializeFromStorage } from '@/stores/auth.store';
 import databaseManager from '@/database/manager';
+import { Toaster } from '@/components/ui/sonner';
 
 const App = () => {
   const initializeFromStorage = useInitializeFromStorage();
@@ -16,7 +17,7 @@ const App = () => {
     };
 
     window.addEventListener('beforeunload', handleBeforeUnload);
-    
+
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
@@ -26,8 +27,9 @@ const App = () => {
     <BrowserRouter>
       <AppRoutes />
       <CookieConsent />
+      <Toaster position="top-center" />
     </BrowserRouter>
   );
-}
+};
 
 export default App;

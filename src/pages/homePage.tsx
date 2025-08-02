@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-// import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { GroupedTypography } from '@/components/typography';
 import ProjectGrid from '@/containers/project/grid';
 

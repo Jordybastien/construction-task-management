@@ -12,7 +12,7 @@ const TaskDetails = ({ selectedTask }: TaskDetailsProps) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex h-full flex-col overflow-y-auto border-gray-200 bg-white p-4">
+    <div className="flex h-full flex-col lg:overflow-y-auto border-gray-200 bg-white p-4">
       <Typography as="h4">
         {t('PAGES.PROJECT_DETAILS.FLOOR_PLAN.TASK_DETAILS')}
       </Typography>

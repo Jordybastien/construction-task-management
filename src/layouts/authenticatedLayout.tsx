@@ -199,7 +199,7 @@ const AuthLayout = () => {
 
       <main
         className={twMerge(
-          isFullScreen ? 'w-full' : 'mx-auto max-w-7xl py-6 sm:px-6 lg:px-8'
+          isFullScreen ? 'w-full' : 'mx-auto max-w-7xl py-6 px-4 lg:px-8'
         )}>
         <Outlet />
       </main>

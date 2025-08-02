@@ -39,6 +39,7 @@ export const roomSchema: RxJsonSchema<RoomDocType> = {
       type: 'string',
       enum: Object.values(RoomType),
       default: RoomType.OTHER,
+      maxLength: 36,
     },
     area_sqm: {
       type: 'number',

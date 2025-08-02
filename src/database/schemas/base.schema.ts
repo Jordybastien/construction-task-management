@@ -33,6 +33,13 @@ export enum TaskStatus {
   DONE = 'done',
 }
 
+export enum ProjectStatus {
+  ACTIVE = 'active',
+  PLANNING = 'planning',
+  ON_HOLD = 'on_hold',
+  COMPLETED = 'completed',
+}
+
 export enum ProjectRole {
   OWNER = 'owner',
   ADMIN = 'admin',

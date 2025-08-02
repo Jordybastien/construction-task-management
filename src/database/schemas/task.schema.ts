@@ -54,6 +54,7 @@ export const taskSchema: RxJsonSchema<TaskDocType> = {
       type: 'string',
       enum: Object.values(TaskStatus),
       default: TaskStatus.NOT_STARTED,
+      maxLength: 36,
     },
     created_by: {
       type: 'string',
@@ -68,6 +69,7 @@ export const taskSchema: RxJsonSchema<TaskDocType> = {
     completed_at: {
       type: 'string',
       format: 'date-time',
+      maxLength: 30,
     },
   },
   required: [
