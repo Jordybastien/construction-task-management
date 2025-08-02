@@ -77,6 +77,7 @@ const AuthLayout = () => {
     },
   ];
 
+  // @Note: There should be an elegant way to handle this but for now this should do
   // Check if current route is project details to apply full width
   const isFullScreen = useMemo(
     () => location.pathname.includes('/project/'),

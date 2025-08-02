@@ -10,6 +10,7 @@ interface QueryState {
 
 interface QueryOptions<T> {
   enabled?: boolean;
+  queryKey?: (string | undefined)[];
   onSuccess?: (data: T) => void | Promise<void>;
   onError?: (error: ErrorProps) => void | Promise<void>;
   onSettled?: (
@@ -30,6 +31,7 @@ interface QueryResult extends QueryState {
 // - Track lastFetched timestamp in store
 // - Check if data is stale before manual refetch
 // - Optionally add background refetch intervals
+// @Note: Nope not doing this, time constraint
 
 export function useQuery<T>(
   queryFn: () => Promise<T>,
@@ -42,8 +44,9 @@ export function useQuery<T>(
     isSuccess: false,
   });
 
-  const { enabled = true } = options;
+  const { enabled = true, queryKey } = options;
   const hasFetchedRef = useRef(false);
+  const lastQueryKeyRef = useRef<string | undefined>(null);
 
   const refetch = useCallback(
     async (): Promise<void> => {
@@ -84,15 +87,20 @@ export function useQuery<T>(
     [queryFn, options]
   );
 
-  // Auto-fetch once when enabled becomes truthy
-  // Ref ensures fetch only happens once per component lifecycle
-  // No reset needed - page reload/unmount clears the ref naturally
+  // Auto-fetch once when enabled becomes truthy or when query key changes
+  // Ref ensures fetch only happens once per component lifecycle unless queryKey changes
   useEffect(() => {
-    if (enabled && !hasFetchedRef.current) {
+    // Filter out undefined values from queryKey, similar to React Query
+    const filteredQueryKey = queryKey?.filter((key): key is string => key !== undefined);
+    const currentQueryKey = filteredQueryKey?.length ? JSON.stringify(filteredQueryKey) : undefined;
+    const queryKeyChanged = currentQueryKey !== lastQueryKeyRef.current;
+    
+    if (enabled && (!hasFetchedRef.current || queryKeyChanged)) {
       hasFetchedRef.current = true;
+      lastQueryKeyRef.current = currentQueryKey;
       refetch();
     }
-  }, [enabled]);
+  }, [enabled, queryKey, refetch]);
 
   return {
     ...state,
