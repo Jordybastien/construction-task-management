@@ -12,6 +12,11 @@
 
 A sophisticated construction task management system that enables teams to create, track, and manage tasks directly on interactive floor plans. Built for construction sites with poor connectivity, featuring offline-first architecture, real-time collaboration, and precision spatial data management.
 
+## Application
+
+[Link to Deployed App](https://construction-task-management.vercel.app/)
+
+
 ## DB Diagram
 
 [Link to DB Diagram](https://dbdiagram.io/d/Construction-task-manager-6889d82fcca18e685c695e73)
@@ -89,11 +94,19 @@ src/
 ├── 🗄️ database/              # Offline-first database layer
 │   ├── schemas/              # RxDB schema definitions
 │   ├── services/             # Repository pattern implementations
+│   │   ├── base.service.ts       # Common database operations
+│   │   ├── project.service.ts    # Project CRUD + statistics
+│   │   ├── task.service.ts       # Task management + checklist
+│   │   └── index.ts              # Service aggregation
 │   ├── dtos/                 # Data transfer objects
 │   └── errors/               # Centralized error handling
 ├── 🎣 hooks/                 # Custom React hooks for data fetching
 ├── 🏪 stores/                # Zustand state management
 ├── 🌐 services/              # API integration layer
+│   ├── apiHelper.ts          # Online/offline request handler
+│   ├── project.ts            # Project API service example
+│   ├── task.ts               # Task API operations
+│   └── api.ts                # Axios configuration
 ├── 📄 pages/                 # Route-level components
 ├── 🧭 router/                # React Router configuration
 ├── 🛠️ utils/                 # Utility functions
@@ -149,6 +162,172 @@ Projects (1:N) → FloorPlans (1:N) → Rooms (1:N) → Tasks (1:N) → Checklis
 - **Status Workflows**: Finite state machines for task progression
 - **Progress Calculation**: Automatic completion percentage aggregation
 
+### **Floor Plan Mapping System**
+
+The floor plan visualization system uses Leaflet.js with a custom coordinate system to transform architectural drawings into interactive task management interfaces.
+
+#### **Architecture Overview**
+
+![Floor plan system](./public/assets/architecture-2.png)
+
+#### **Floor Plan Entity Design**
+
+Each floor plan contains detailed spatial and scale information:
+
+```typescript
+interface FloorPlan {
+  // Identity
+  id: string;
+  name: string;              // e.g., "Ground Floor"
+  project_id: string;
+  
+  // Image Properties
+  image_url: string;         // Path to architectural drawing
+  image_width: number;       // Pixel width (e.g., 1536px)
+  image_height: number;      // Pixel height (e.g., 1024px)
+  
+  // Scale Calibration
+  scale_pixels_per_meter: number;  // Conversion factor (e.g., 40px = 1m)
+  floor_level: number;       // Building level (0 = ground floor)
+}
+```
+
+**Key Attributes Explained:**
+- **`scale_pixels_per_meter`**: Critical for accurate measurements - converts screen pixels to real-world meters
+- **`image_width/height`**: Defines the coordinate system bounds for precise positioning
+- **`floor_level`**: Enables multi-story building support with vertical organization
+
+#### **Room Boundary System**
+
+Rooms are defined by polygon coordinates that overlay perfectly on floor plans:
+
+```typescript
+interface Room {
+  id: string;
+  name: string;                    // e.g., "Storage Unit", "Conference Room"
+  floor_plan_id: string;
+  boundary_coordinates: string;    // JSON array: "[[x1,y1], [x2,y2], ...]"
+  room_type: RoomType;            // LIVING_ROOM, OFFICE, STORAGE, etc.
+  area_sqm?: number;              // Calculated or manual area
+}
+```
+
+**Coordinate System:**
+```typescript
+// Example room boundary (rectangular storage unit)
+const storageUnit = {
+  boundary_coordinates: '[[125, 800], [590, 800], [590, 1336], [125, 1336]]'
+  // Creates a 465px × 536px rectangle
+  // Real-world size: ~11.6m × 13.4m (with 40px/meter scale)
+};
+```
+
+#### **Task Spatial Positioning**
+
+Tasks are positioned using Leaflet's coordinate system:
+
+```typescript
+interface Task {
+  // ... other properties
+  position_lat: number;     // Y-coordinate (-10000 to 10000)
+  position_lng: number;     // X-coordinate (-10000 to 10000)
+  room_id: string;         // Associated room for context
+}
+```
+
+**Coordinate Bounds:**
+- Range: `-10000` to `10000` (architectural coordinates, not geographic)
+- Resolution: Sub-pixel precision for millimeter-accurate positioning
+- Origin: Top-left corner of floor plan image
+
+#### **Visual Layer Implementation**
+
+```typescript
+// LeafletFloorPlan.tsx - Multi-layer rendering
+  // 1. Base Image Layer
+  const imageOverlay = L.imageOverlay(
+    floorPlan.image_url,
+    [[0, 0], [floorPlan.image_height, floorPlan.image_width]]
+  ).addTo(map);
+  
+  // 2. Room Boundary Layer
+  rooms.forEach((room) => {
+    const coordinates = JSON.parse(room.boundary_coordinates);
+    L.polygon(coordinates, {
+      color: '#3b82f6',
+      fillOpacity: 0.1,
+      weight: 2
+    }).addTo(map);
+  });
+  
+  // 3. Task Marker Layer
+  tasks.forEach((task) => {
+    L.marker([task.position_lat, task.position_lng], {
+      icon: createTaskIcon(task.status)
+    }).addTo(map);
+  });
+```
+
+#### **Predefined Floor Plan System**
+
+The system uses curated architectural drawings instead of user uploads:
+
+```typescript
+export const PREDEFINED_FLOOR_PLANS = [
+  {
+    id: 'plan-a',
+    name: 'Small Office',
+    image_url: '/assets/plans/1.png',
+    image_width: 1536,
+    image_height: 1024,
+    scale_pixels_per_meter: 40,
+    description: '20m x 15m office building',
+    rooms: [{
+      name: 'Storage Unit',
+      boundary_coordinates: '[[125, 800], [590, 800], [590, 1336], [125, 1336]]'
+    }]
+  }
+];
+```
+
+**Why Predefined Images?**
+1. **Quality Control**: Professional architectural drawings with known scales
+2. **Immediate Usability**: No need for users to calibrate or upload plans
+3. **Consistent Experience**: Standardized room layouts and proportions
+4. **Demo Readiness**: Instant project creation with realistic floor plans
+
+#### **Default Creation Workflow**
+
+```typescript
+// project.service.ts - Auto-setup on project creation
+private async createDefaultFloorPlanAndRoom(projectId: string): Promise<void> {
+  const defaultPlan = PREDEFINED_FLOOR_PLANS[0];
+  
+  // Create floor plan with predefined dimensions
+  const floorPlan = await this.db.floor_plans.insert({
+    name: 'Ground Floor',
+    project_id: projectId,
+    image_url: defaultPlan.image_url,
+    image_width: defaultPlan.image_width,
+    image_height: defaultPlan.image_height,
+    scale_pixels_per_meter: defaultPlan.scale_pixels_per_meter,
+  });
+  
+  // Create default room with predefined boundaries
+  await this.db.rooms.insert({
+    name: 'Storage Unit',
+    floor_plan_id: floorPlan.id,
+    boundary_coordinates: defaultPlan.rooms[0].boundary_coordinates,
+    room_type: RoomType.LIVING_ROOM,
+  });
+}
+```
+
+**Benefits:**
+- **Zero Configuration**: Projects immediately have interactive floor plans
+- **Consistent Scale**: All predefined plans use verified pixel-to-meter ratios
+- **Room Context**: Tasks are automatically associated with logical spaces
+
 ### **State Management Architecture**
 
 ```typescript
@@ -169,6 +348,68 @@ interface TaskStore {
   calculateChecklistCounts: (checklistItems?: ChecklistItem[]) => number;
 }
 ```
+
+### **API Integration Pattern**
+
+The application uses a dual-mode architecture handling both online API calls and offline database operations:
+
+```typescript
+// apiHelper.ts - Smart request routing
+const withApi = async <T>(
+  apiCallback: (api: AxiosInstance) => Promise<{ data: T }>,
+  fallbackFn: (db: DatabaseServices) => Promise<T>
+): Promise<T> => {
+  if (import.meta.env.VITE_OFFLINE_MODE === 'true') {
+    const db = await ensureDatabaseInitialized();
+    return await fallbackFn(db);
+  }
+  
+  // Online mode: API first, fallback to database on network error
+  try {
+    const response = await apiCallback(api);
+    return response.data;
+  } catch (error) {
+    if (isNetworkError(error) && fallbackFn) {
+      const db = await ensureDatabaseInitialized();
+      return await fallbackFn(db);
+    }
+    throw formatApiErrorResponse(error); // formatted error
+  }
+};
+```
+
+**Service Implementation Example:**
+
+```typescript
+// services/project.ts - Dual-mode service
+export const fetchProjectsByUser = async (userId: string): Promise<ProjectWithStats[]> => {
+  return await withApi(
+    // Online: REST API call
+    (api) => api.get(`/projects/user/${userId}`),
+    
+    // Offline: Database service call
+    async (db) => {
+      return await db.projects.findProjectsByUserWithStats(userId);
+    }
+  );
+};
+
+export const createProject = async (payload: CreateProjectDto): Promise<Project> => {
+  return await withApi(
+    (api) => api.post('/projects', payload),
+    async (db) => {
+      const projectDoc = await db.projects.createProject(payload);
+      return projectDoc.toJSON() as Project;
+    }
+  );
+};
+```
+
+**Benefits:**
+- **Environment Flexibility**: Switch between online/offline modes via environment variables
+- **Graceful Degradation**: Automatic fallback to local database on network failures
+- **Consistent Interface**: Services remain identical regardless of data source
+- **Development Speed**: Rapid prototyping with offline-first approach
 
 ## 🧪 Testing Strategy
 
@@ -208,7 +449,6 @@ npm run build:analyze
 - **First Contentful Paint**: < 1.5s
 - **Time to Interactive**: < 3s
 - **Bundle Size**: < 500KB gzipped
-- **Database Query Performance**: < 100ms for complex joins
 
 ## 🌐 Internationalization
 
@@ -293,10 +533,26 @@ const supportedLanguages = ['en', 'de'];
    };
    ```
 
-2. **Data Aggregation Performance Issues**
+2. **Floor Plan System Limitations**
+   ```typescript
+   // Current: Fixed predefined floor plans only
+   export const PREDEFINED_FLOOR_PLANS = [
+     { id: 'plan-a', image_url: '/assets/plans/1.png' },
+     { id: 'plan-b', image_url: '/assets/plans/2.png' }
+   ];
+   // Missing: Custom floor plan upload and calibration
+   ```
+   
+   **Limitations:**
+   - No custom floor plan upload functionality
+   - Manual coordinate calibration required for new plans
+   - Limited to 3 predefined architectural layouts
+   - No support for CAD file import (DWG, DXF)
+
+3. **Data Aggregation Performance Issues**
    ```typescript
    // Current: Inefficient multiple queries for statistics
-   async findProjectWithStats(projectId: string): Promise<ProjectWithStats> {
+   async findProjectsByUserWithStats(projectId: string): Promise<ProjectWithStats> {
      const project = await this.findById(projectId);
      const floorPlans = await this.db.floorPlans.find({ selector: { project_id: projectId } }).exec();
      
@@ -314,16 +570,35 @@ const supportedLanguages = ['en', 'de'];
    
    **Impact**: N+1 query problems causing 50-100ms delays for complex project statistics
 
-3. **Performance Optimizations**
+4. **Coordinate System Edge Cases**
+   ```typescript
+   // Current: Basic coordinate validation
+   position_lat: { minimum: -10000, maximum: 10000 }
+   // Missing: Room boundary validation, coordinate transformation edge cases
+   ```
+   
+   **Issues:**
+   - Tasks can be positioned outside room boundaries
+   - No validation for overlapping rooms
+   - Coordinate system doesn't handle rotation or skewed floor plans
+
+5. **Performance Optimizations**
    - Implement React.memo for expensive components
    - Optimize RxDB queries with proper indexing
    - compress RxDB database, use compression
    - Advanced code splitting & lazy loading of some libraries & functionalities
 
-4. **Accessibility (WCAG 2.1 AA)**
+6. **Accessibility (WCAG 2.1 AA)**
    - Keyboard navigation for floor plan interactions
    - Screen readers
    - Focus management in complex modals
+
+7. **Floor Plan Enhancement Needs**
+   - **Custom Upload System**: File upload with automatic scale detection
+   - **Advanced Measurement Tools**: Distance, area, and angle measurement
+   - **Room Creation UI**: Interactive polygon drawing for custom rooms
+   - **Multi-Floor Support**: Vertical navigation between building levels
+   - **Coordinate Precision**: Sub-pixel accuracy for construction-grade measurements
 
 ### **Feature Enhancements**
 1. **Real-time Collaboration**
@@ -377,7 +652,5 @@ const supportedLanguages = ['en', 'de'];
 <div align="center">
 
 **Built with ❤️ for construction teams worldwide**
-
-[Demo](https://construction-task-manager.demo.com) • [Documentation](https://docs.construction-task-manager.com) • [API Reference](https://api.construction-task-manager.com)
 
 </div>

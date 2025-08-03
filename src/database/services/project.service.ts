@@ -1,6 +1,14 @@
 import { BaseService } from './base.service';
-import type { ProjectDocument, ProjectWithStats } from '../schemas/project.schema';
-import type { Project, CreateProjectDto, UpdateProjectDto, ProjectUser } from '../dtos/project.dto';
+import type {
+  ProjectDocument,
+  ProjectWithStats,
+} from '../schemas/project.schema';
+import type {
+  Project,
+  CreateProjectDto,
+  UpdateProjectDto,
+  ProjectUser,
+} from '../dtos/project.dto';
 import type { FloorPlan } from '../dtos/floorPlan.dto';
 import type { Room } from '../dtos/room.dto';
 import { ProjectRole, ProjectStatus, RoomType } from '../schemas/base.schema';
@@ -14,7 +22,7 @@ export class ProjectService extends BaseService {
         id: this.generateId(),
         ...dto,
         status: dto.status || ProjectStatus.PLANNING,
-        ...this.createAuditTrail()
+        ...this.createAuditTrail(),
       };
 
       const project = await this.db.projects.insert(projectData);
@@ -42,18 +50,18 @@ export class ProjectService extends BaseService {
     try {
       const projectUsers = await this.db.project_users
         .find({
-          selector: { user_id: userId }
+          selector: { user_id: userId },
         })
         .exec();
 
-      const projectIds = projectUsers.map(pu => pu.project_id);
-      
+      const projectIds = projectUsers.map((pu) => pu.project_id);
+
       return await this.db.projects
         .find({
           selector: {
-            id: { $in: projectIds }
+            id: { $in: projectIds },
           },
-          sort: [{ created_at: 'desc' }]
+          sort: [{ created_at: 'desc' }],
         })
         .exec();
     } catch (error) {
@@ -61,7 +69,9 @@ export class ProjectService extends BaseService {
     }
   }
 
-  async findProjectsByUserWithStats(userId: string): Promise<ProjectWithStats[]> {
+  async findProjectsByUserWithStats(
+    userId: string
+  ): Promise<ProjectWithStats[]> {
     try {
       const projects = await this.findProjectsByUser(userId);
       const projectsWithStats: ProjectWithStats[] = [];
@@ -69,7 +79,7 @@ export class ProjectService extends BaseService {
       for (const projectDoc of projects) {
         const project = projectDoc.toJSON();
         const stats = await this.getProjectStats(project.id);
-        
+
         projectsWithStats.push({
           ...project,
           taskCount: stats.taskCount,
@@ -83,7 +93,10 @@ export class ProjectService extends BaseService {
     }
   }
 
-  async updateProject(id: string, dto: UpdateProjectDto): Promise<ProjectDocument> {
+  async updateProject(
+    id: string,
+    dto: UpdateProjectDto
+  ): Promise<ProjectDocument> {
     try {
       const project = await this.findProjectById(id);
       if (!project) {
@@ -93,8 +106,8 @@ export class ProjectService extends BaseService {
       return await project.update({
         $set: {
           ...dto,
-          ...this.updateAuditTrail()
-        }
+          ...this.updateAuditTrail(),
+        },
       });
     } catch (error) {
       this.handleError(error, 'updateProject');
@@ -120,8 +133,8 @@ export class ProjectService extends BaseService {
   }
 
   private async addProjectUser(
-    projectId: string, 
-    userId: string, 
+    projectId: string,
+    userId: string,
     role: ProjectRole
   ): Promise<void> {
     try {
@@ -130,7 +143,7 @@ export class ProjectService extends BaseService {
         project_id: projectId,
         user_id: userId,
         role,
-        created_at: this.getCurrentTimestamp()
+        created_at: this.getCurrentTimestamp(),
       };
 
       await this.db.project_users.insert(projectUserData);
@@ -139,14 +152,17 @@ export class ProjectService extends BaseService {
     }
   }
 
-  async getUserRole(projectId: string, userId: string): Promise<ProjectRole | null> {
+  async getUserRole(
+    projectId: string,
+    userId: string
+  ): Promise<ProjectRole | null> {
     try {
       const projectUser = await this.db.project_users
         .findOne({
           selector: {
             project_id: projectId,
-            user_id: userId
-          }
+            user_id: userId,
+          },
         })
         .exec();
 
@@ -156,63 +172,68 @@ export class ProjectService extends BaseService {
     }
   }
 
-  async getProjectStats(projectId: string): Promise<{ taskCount: number; progress: number }> {
+  async getProjectStats(
+    projectId: string
+  ): Promise<{ taskCount: number; progress: number }> {
     try {
       // Get all floor plans for this project
       const floorPlans = await this.db.floor_plans
         .find({
-          selector: { project_id: projectId }
+          selector: { project_id: projectId },
         })
         .exec();
 
-      const floorPlanIds = floorPlans.map(fp => fp.id);
-      
+      const floorPlanIds = floorPlans.map((fp) => fp.id);
+
       // Get all rooms for these floor plans
       const rooms = await this.db.rooms
         .find({
           selector: {
-            floor_plan_id: { $in: floorPlanIds }
-          }
+            floor_plan_id: { $in: floorPlanIds },
+          },
         })
         .exec();
 
-      const roomIds = rooms.map(room => room.id);
-      
+      const roomIds = rooms.map((room) => room.id);
+
       // Get all tasks for these rooms
       const tasks = await this.db.tasks
         .find({
           selector: {
-            room_id: { $in: roomIds }
-          }
+            room_id: { $in: roomIds },
+          },
         })
         .exec();
 
       const taskCount = tasks.length;
-      
+
       if (taskCount === 0) {
         return { taskCount: 0, progress: 0 };
       }
 
       // Calculate average progress across all tasks
       let totalProgress = 0;
-      
+
       for (const task of tasks) {
         const checklistItems = await this.db.checklist_items
           .find({
-            selector: { task_id: task.id }
+            selector: { task_id: task.id },
           })
           .exec();
 
-        const completedItems = checklistItems.filter(item => item.status === 'done').length;
-        const taskProgress = checklistItems.length > 0 
-          ? (completedItems / checklistItems.length) * 100 
-          : 0;
-          
+        const completedItems = checklistItems.filter(
+          (item) => item.status === 'done'
+        ).length;
+        const taskProgress =
+          checklistItems.length > 0
+            ? (completedItems / checklistItems.length) * 100
+            : 0;
+
         totalProgress += taskProgress;
       }
 
       const averageProgress = Math.round(totalProgress / taskCount);
-      
+
       return { taskCount, progress: averageProgress };
     } catch (error) {
       this.handleError(error, 'getProjectStats');
@@ -220,11 +241,13 @@ export class ProjectService extends BaseService {
     }
   }
 
-  private async createDefaultFloorPlanAndRoom(projectId: string): Promise<void> {
+  private async createDefaultFloorPlanAndRoom(
+    projectId: string
+  ): Promise<void> {
     try {
       // Use the first predefined floor plan as default
       const defaultPlan = PREDEFINED_FLOOR_PLANS[0];
-      
+
       // Create default floor plan
       const floorPlanData: FloorPlan = {
         id: this.generateId(),
@@ -235,7 +258,7 @@ export class ProjectService extends BaseService {
         image_height: defaultPlan.image_height,
         scale_pixels_per_meter: defaultPlan.scale_pixels_per_meter,
         floor_level: 0,
-        ...this.createAuditTrail()
+        ...this.createAuditTrail(),
       };
 
       const floorPlan = await this.db.floor_plans.insert(floorPlanData);
@@ -243,14 +266,13 @@ export class ProjectService extends BaseService {
       // Create default room
       const roomData: Room = {
         id: this.generateId(),
-        name: 'Living Room',
+        name: 'Storage Unit',
         floor_plan_id: floorPlan.id,
-        boundary_coordinates: JSON.stringify([
-          [100, 100], [500, 100], [500, 400], [100, 400]
-        ]), // Simple rectangle coordinates
+        // @ts-ignore @Note: it will never be null it's a constant
+        boundary_coordinates: defaultPlan.rooms[0]?.boundary_coordinates, // Simple rectangle coordinates
         room_type: RoomType.LIVING_ROOM,
         area_sqm: 25,
-        ...this.createAuditTrail()
+        ...this.createAuditTrail(),
       };
 
       await this.db.rooms.insert(roomData);

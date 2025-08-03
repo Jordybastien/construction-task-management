@@ -10,12 +10,17 @@ interface UseCreateProjectOptions {
   onError?: (error: ErrorProps) => void | Promise<void>;
 }
 
-export function useCreateProject({ onError, onSuccess }: UseCreateProjectOptions = {}) {
+export function useCreateProject({
+  onError,
+  onSuccess,
+}: UseCreateProjectOptions = {}) {
   const addProject = useAddProject();
 
   return useMutation(
     async (projectData: CreateProjectDto) => {
       const createdProject = await createProject(projectData);
+      // Mimic backend server delay for demo purposes
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       addProject(createdProject as ProjectWithStats);
       return createdProject;
     },
