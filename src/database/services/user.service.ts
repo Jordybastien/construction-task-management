@@ -1,7 +1,7 @@
 import { BaseService } from './base.service';
 import type { UserDocument } from '../schemas/user.schema';
 import type { User, CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
-import { DatabaseError } from '../errors/database-error';
+import { DatabaseError } from '../errors/databaseErrors';
 
 export class UserService extends BaseService {
   async createUser(dto: CreateUserDto): Promise<UserDocument> {

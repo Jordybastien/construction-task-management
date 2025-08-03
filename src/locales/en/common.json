@@ -1,4 +1,15 @@
 {
+  "COMMON": {
+    "COMPLETED": "completed",
+    "OF": "of",
+    "TO": "to",
+    "UNKNOWN_USER": "Unknown User",
+    "VIEW_MORE": "View More",
+    "VIEW_LESS": "View Less",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "DELETE": "Delete"
+  },
   "PAGES": {
     "LOGIN": {
       "TITLE": "Login",
@@ -51,12 +62,21 @@
       "SAMPLE_PROJECT": "Sample Project",
       "STATUS_LABEL": "Status",
       "IN_PROGRESS": "In Progress",
+      "SELECT_FLOOR_PLAN": "Select a floor plan",
       "HEADER": {
         "TITLE": "Construction Task Manager - Downtown Office Complex"
       },
       "VIEWS": {
         "FLOOR_PLAN": "Floor Plan",
         "KANBAN": "Kanban"
+      },
+      "STATISTICS": {
+        "TOTAL_TASKS": "Total Tasks",
+        "COMPLETED_TASKS": "Completed Tasks",
+        "ROOMS": "Rooms",
+        "WITH_TASKS": "with tasks",
+        "IN_PROGRESS": "In Progress",
+        "BLOCKED": "blocked"
       },
       "FLOOR_PLAN": {
         "TITLE": "Floor Plan",
@@ -71,6 +91,9 @@
         "FINAL_CHECK": "Final Check",
         "DONE": "Done",
         "FOOTER_TEXT": "Click anywhere on floor plan to create task at that location",
+        "NO_TASKS": "No tasks found for this floor plan. Create your first task to get started!",
+        "SELECT_FLOOR_PLAN": "Please select a floor plan to view",
+        "NO_IMAGE": "No floor plan image available",
         "CONTROLS": {
           "ZOOM_IN": "Zoom In",
           "ZOOM_OUT": "Zoom Out",
@@ -94,6 +117,47 @@
         "ASSIGNEE": "Assignee",
         "LAST_UPDATED": "Last Updated"
       },
+      "ROOM": {
+        "ADD_ROOM": "Add Room",
+        "ROOMS_LIST": "Rooms",
+        "NO_ROOMS": "No rooms found for this floor plan. Add your first room to get started!",
+        "TASKS": "tasks",
+        "MODAL": {
+          "CREATE_TITLE": "Add Room",
+          "CREATE_DESCRIPTION": "Add a new room to the floor plan",
+          "EDIT_TITLE": "Edit Room",
+          "EDIT_DESCRIPTION": "Update the room details"
+        },
+        "FORM": {
+          "NAME": {
+            "LABEL": "Room Name",
+            "PLACEHOLDER": "Enter room name",
+            "ERRORS": {
+              "REQUIRED": "Room name is required",
+              "TOO_LONG": "Room name must be less than 100 characters"
+            }
+          },
+          "TYPE": {
+            "LABEL": "Room Type",
+            "PLACEHOLDER": "Select room type"
+          },
+          "AREA": {
+            "LABEL": "Area (m²)",
+            "PLACEHOLDER": "Enter room area in square meters",
+            "ERRORS": {
+              "INVALID": "Area must be a positive number"
+            }
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Room created successfully!",
+            "UPDATE_MESSAGE": "Room updated successfully!",
+            "DELETE_MESSAGE": "Room deleted successfully!"
+          },
+          "ERROR": {
+            "DELETE_MESSAGE": "Failed to delete room"
+          }
+        }
+      },
       "TASK": {
         "NEW": "NEW",
         "FILTER_SEARCH": "Filter & Search",
@@ -106,10 +170,98 @@
         "EDIT_TASK": "EDIT TASK",
         "ADD_COMMENT": "ADD COMMENT",
         "CREATED_BY": "Created by",
+        "HISTORY": "History",
+        "NO_HISTORY": "No history available for this task",
+        "STATUS_CHANGED_FROM": "Status changed from",
+        "NO_ROOM_ASSIGNED": "No room assigned",
         "PRIORITY": {
           "LOW": "Low",
           "MEDIUM": "Medium",
           "HIGH": "High"
+        },
+        "MODAL": {
+          "CREATE_TITLE": "Create New Task",
+          "CREATE_DESCRIPTION": "Fill in the details to create a new task",
+          "EDIT_TITLE": "Edit Task",
+          "EDIT_DESCRIPTION": "Update the task details"
+        },
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Task Title",
+            "PLACEHOLDER": "Enter task title",
+            "ERRORS": {
+              "INVALID": "Task title must be at least 2 characters"
+            }
+          },
+          "DESCRIPTION": {
+            "LABEL": "Description",
+            "PLACEHOLDER": "Enter task description (optional)"
+          },
+          "ROOM": {
+            "LABEL": "Room",
+            "PLACEHOLDER": "Select a room",
+            "NO_ROOM": "No specific room",
+            "ERRORS": {
+              "REQUIRED": "Please select a room"
+            }
+          },
+          "STATUS": {
+            "LABEL": "Status",
+            "PLACEHOLDER": "Select status"
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Task created successfully!",
+            "UPDATE_MESSAGE": "Task updated successfully!",
+            "DELETE_MESSAGE": "Task deleted successfully!"
+          },
+          "DELETE": {
+            "TITLE": "Delete Task",
+            "DESCRIPTION": "Are you sure you want to delete \"{{taskName}}\"? This action cannot be undone."
+          }
+        }
+      },
+      "CHECKLIST": {
+        "ADD_ITEM": "Add Item",
+        "NO_ITEMS": "No checklist items found. Add your first item to get started!",
+        "MODAL": {
+          "CREATE_TITLE": "Add Checklist Item",
+          "CREATE_DESCRIPTION": "Add a new item to the task checklist",
+          "EDIT_TITLE": "Edit Checklist Item",
+          "EDIT_DESCRIPTION": "Update the checklist item details"
+        },
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Item Title",
+            "PLACEHOLDER": "Enter checklist item title",
+            "ERRORS": {
+              "REQUIRED": "Title is required",
+              "TOO_LONG": "Title must be less than 200 characters"
+            }
+          },
+          "DESCRIPTION": {
+            "LABEL": "Description",
+            "PLACEHOLDER": "Enter description (optional)",
+            "ERRORS": {
+              "TOO_LONG": "Description must be less than 1000 characters"
+            }
+          },
+          "STATUS": {
+            "LABEL": "Status",
+            "PLACEHOLDER": "Select status"
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Checklist item created successfully!",
+            "UPDATE_MESSAGE": "Checklist item updated successfully!",
+            "DELETE_MESSAGE": "Checklist item deleted successfully!"
+          },
+          "ERROR": {
+            "UPDATE_MESSAGE": "Failed to update checklist item",
+            "DELETE_MESSAGE": "Failed to delete checklist item"
+          },
+          "DELETE": {
+            "TITLE": "Delete Checklist Item",
+            "DESCRIPTION": "Are you sure you want to delete \"{{itemTitle}}\"? This action cannot be undone."
+          }
         }
       }
     },
@@ -178,6 +330,24 @@
         "BLOCKED": "Blocked",
         "FINAL_CHECK": "Final Check",
         "DONE": "Done"
+      }
+    },
+    "ROOM": {
+      "TYPE_ENUM": {
+        "KITCHEN": "Kitchen",
+        "BEDROOM": "Bedroom",
+        "BATHROOM": "Bathroom",
+        "LIVING_ROOM": "Living Room",
+        "DINING_ROOM": "Dining Room",
+        "OFFICE": "Office",
+        "GARAGE": "Garage",
+        "BASEMENT": "Basement",
+        "ATTIC": "Attic",
+        "HALLWAY": "Hallway",
+        "STAIRS": "Stairs",
+        "UTILITY": "Utility Room",
+        "STORAGE": "Storage",
+        "OTHER": "Other"
       }
     }
   },

@@ -4,9 +4,10 @@ import type {
   ChecklistItem,
   CreateChecklistItemDto,
   UpdateChecklistItemDto,
+  TaskHistory,
 } from '../dtos/task.dto';
 import { TaskStatus } from '../schemas/base.schema';
-import { DatabaseError } from '../errors/database-error';
+import { DatabaseError } from '../errors/databaseErrors';
 
 export class ChecklistService extends BaseService {
   async createChecklistItem(
@@ -57,13 +58,17 @@ export class ChecklistService extends BaseService {
 
   async updateChecklistItem(
     id: string,
-    updates: UpdateChecklistItemDto
+    updates: UpdateChecklistItemDto,
+    userId?: string
   ): Promise<ChecklistItemDocument> {
     try {
       const item = await this.findChecklistItemById(id);
       if (!item) {
         throw new Error(`Checklist item with id ${id} not found`);
       }
+
+      const oldStatus = item.status;
+      const newStatus = updates.status;
 
       const updateData: any = {
         ...updates,
@@ -77,9 +82,26 @@ export class ChecklistService extends BaseService {
         updateData.completed_at = this.getCurrentTimestamp();
       }
 
-      return await item.update({
+      const updatedItem = await item.update({
         $set: updateData,
       });
+
+      if (newStatus && newStatus !== oldStatus && userId) {
+        const taskHistoryData: TaskHistory = {
+          id: this.generateId(),
+          task_id: item.task_id,
+          user_id: userId,
+          old_status: oldStatus,
+          new_status: newStatus,
+          checklist_item_id: item.id,
+          checklist_item_name: item.title,
+          ...this.createAuditTrail(),
+        };
+        
+        await this.db.task_history.insert(taskHistoryData);
+      }
+
+      return updatedItem;
     } catch (error) {
       this.handleError(error, 'updateChecklistItem');
     }
@@ -87,9 +109,10 @@ export class ChecklistService extends BaseService {
 
   async updateChecklistItemStatus(
     id: string,
-    status: TaskStatus
+    status: TaskStatus,
+    userId?: string
   ): Promise<ChecklistItemDocument> {
-    return this.updateChecklistItem(id, { status });
+    return this.updateChecklistItem(id, { status }, userId);
   }
 
   async deleteChecklistItem(id: string): Promise<boolean> {

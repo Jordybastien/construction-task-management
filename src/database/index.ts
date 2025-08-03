@@ -1,7 +1,6 @@
 import '@babel/polyfill'; // Required polyfill for RxDB's ES8 features in older browsers
 import { createRxDatabase, addRxPlugin, RxDatabase } from 'rxdb';
 import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
-import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
 import { RxDBMigrationSchemaPlugin } from 'rxdb/plugins/migration-schema';
 import { RxDBCleanupPlugin } from 'rxdb/plugins/cleanup';
@@ -50,6 +49,11 @@ import {
   type TaskCommentDocType,
   type TaskCommentCollection,
 } from './schemas/taskComment.schema';
+import {
+  taskHistorySchema,
+  type TaskHistoryDocType,
+  type TaskHistoryCollection,
+} from './schemas/taskHistory.schema';
 
 if (process.env.NODE_ENV === 'development') {
   addRxPlugin(RxDBDevModePlugin);
@@ -69,6 +73,7 @@ export type DatabaseCollections = {
   tasks: TaskCollection;
   checklist_items: ChecklistItemCollection;
   task_comments: TaskCommentCollection;
+  task_history: TaskHistoryCollection;
 };
 
 export type Database = RxDatabase<DatabaseCollections>;
@@ -107,6 +112,7 @@ export async function createDatabase(userId: string): Promise<Database> {
     }),
     multiInstance: true, // Allow multiple tabs/windows to share the same database
     eventReduce: true, // Optimize query performance by reducing duplicate events
+    closeDuplicates: true, // Close duplicate databases (useful for React hot reload) noticed in development
     cleanupPolicy: {
       minimumDeletedTime: SEVEN_DAYS, // Keep deleted docs for 7 days
       minimumCollectionAge: THIRTY_DAYS, // Collections must be 30 days old
@@ -149,6 +155,9 @@ export async function createDatabase(userId: string): Promise<Database> {
     task_comments: {
       schema: taskCommentSchema,
     },
+    task_history: {
+      schema: taskHistorySchema,
+    },
   });
 
   // Replication disabled - no backend server
@@ -180,4 +189,5 @@ export type {
   TaskDocType,
   ChecklistItemDocType,
   TaskCommentDocType,
+  TaskHistoryDocType,
 };

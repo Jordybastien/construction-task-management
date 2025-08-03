@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { Database } from '../index';
-import { DatabaseError } from '../errors/database-error';
+import { DatabaseError } from '../errors/databaseErrors';
 
 export abstract class BaseService {
   protected db: Database;

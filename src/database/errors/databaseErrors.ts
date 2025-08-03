@@ -75,6 +75,22 @@ export class DatabaseError extends Error {
     });
   }
 
+  static floorPlanNotFound(floorPlanId?: string): DatabaseError {
+    return new DatabaseError({
+      code: ErrorCode.FLOOR_PLAN_NOT_FOUND,
+      message: 'Floor plan not found',
+      context: { floorPlanId }
+    });
+  }
+
+  static roomNotFound(roomId?: string): DatabaseError {
+    return new DatabaseError({
+      code: ErrorCode.ROOM_NOT_FOUND,
+      message: 'Room not found',
+      context: { roomId }
+    });
+  }
+
   static invalidInput(field: string, value?: any): DatabaseError {
     return new DatabaseError({
       code: ErrorCode.INVALID_INPUT,

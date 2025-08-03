@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
-import { Task, TaskStatus } from '@/models/task';
 import StatusIndicatorDot, { PillStatus } from '@/components/statusIndicator';
 import { twMerge } from 'tailwind-merge';
 import Typography from '@/components/typography';
@@ -11,10 +10,23 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { EllipsisVertical, Edit, Trash } from 'lucide-react';
+import type { TaskWithDetails } from '@/database/dtos/task.dto';
+import { TaskStatus } from '@/database/schemas/base.schema';
 
 interface TaskCardProps {
-  task: Task;
+  task: TaskWithDetails;
   onClick?: () => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
   isSelected?: boolean;
 }
 
@@ -29,9 +41,15 @@ export const taskStatusVariants: Record<TaskStatus, PillStatus> = {
 const TaskCard: React.FC<TaskCardProps> = ({
   task,
   onClick,
+  onEdit,
+  onDelete,
   isSelected = false,
 }) => {
   const { t } = useTranslation();
+
+  const progress = task.checklist_count > 0 
+    ? Math.round((task.completed_checklist_count / task.checklist_count) * 100)
+    : 0;
 
   return (
     <Card
@@ -58,15 +76,54 @@ const TaskCard: React.FC<TaskCardProps> = ({
               </Tooltip>
             </div>
             <p className="text-sm text-gray-600">
-              {t('PAGES.PROJECT_DETAILS.TASK.ROOM')} {task.room}
+              {t('PAGES.PROJECT_DETAILS.TASK.ROOM')} {task.room_name || 'No room assigned'}
             </p>
           </div>
           <div className="flex flex-row items-center justify-between">
             <p className="text-xs text-gray-600">
-              {task.completedItems} of {task.totalItems}{' '}
+              {task.completed_checklist_count} of {task.checklist_count}{' '}
               {t('PAGES.PROJECT_DETAILS.TASK.ITEMS_DONE')}
             </p>
-            <ProgressCircle progress={task.progress} size="md" />
+            <div className="flex items-center gap-2">
+              <ProgressCircle progress={progress} size="md" />
+              {(onEdit || onDelete) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="!px-0 focus:ring-0">
+                    <EllipsisVertical className="text-gray-400" size={16} />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel className="text-xs">
+                      {t('HELPERS.ACTIONS.ACTIONS')}
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {onEdit && (
+                      <DropdownMenuItem
+                        className="flex flex-row gap-x-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(task.id);
+                        }}
+                      >
+                        <Edit size={12} />
+                        {t('HELPERS.ACTIONS.EDIT')}
+                      </DropdownMenuItem>
+                    )}
+                    {onDelete && (
+                      <DropdownMenuItem
+                        className="flex flex-row gap-x-2"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete(task.id);
+                        }}
+                      >
+                        <Trash className="text-red-600" size={12} />
+                        {t('HELPERS.ACTIONS.DELETE')}
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </div>
         </div>
       </CardContent>

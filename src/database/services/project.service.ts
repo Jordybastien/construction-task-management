@@ -1,8 +1,11 @@
 import { BaseService } from './base.service';
 import type { ProjectDocument, ProjectWithStats } from '../schemas/project.schema';
 import type { Project, CreateProjectDto, UpdateProjectDto, ProjectUser } from '../dtos/project.dto';
-import { ProjectRole, ProjectStatus } from '../schemas/base.schema';
-import { DatabaseError } from '../errors/database-error';
+import type { FloorPlan } from '../dtos/floorPlan.dto';
+import type { Room } from '../dtos/room.dto';
+import { ProjectRole, ProjectStatus, RoomType } from '../schemas/base.schema';
+import { PREDEFINED_FLOOR_PLANS } from '../dtos/floorPlan.dto';
+import { DatabaseError } from '../errors/databaseErrors';
 
 export class ProjectService extends BaseService {
   async createProject(dto: CreateProjectDto): Promise<ProjectDocument> {
@@ -17,6 +20,9 @@ export class ProjectService extends BaseService {
       const project = await this.db.projects.insert(projectData);
 
       await this.addProjectUser(project.id, dto.created_by, ProjectRole.OWNER);
+
+      // Auto-create default floor plan and room
+      await this.createDefaultFloorPlanAndRoom(project.id);
 
       return project;
     } catch (error) {
@@ -211,6 +217,45 @@ export class ProjectService extends BaseService {
     } catch (error) {
       this.handleError(error, 'getProjectStats');
       return { taskCount: 0, progress: 0 };
+    }
+  }
+
+  private async createDefaultFloorPlanAndRoom(projectId: string): Promise<void> {
+    try {
+      // Use the first predefined floor plan as default
+      const defaultPlan = PREDEFINED_FLOOR_PLANS[0];
+      
+      // Create default floor plan
+      const floorPlanData: FloorPlan = {
+        id: this.generateId(),
+        name: 'Ground Floor',
+        project_id: projectId,
+        image_url: defaultPlan.image_url,
+        image_width: defaultPlan.image_width,
+        image_height: defaultPlan.image_height,
+        scale_pixels_per_meter: defaultPlan.scale_pixels_per_meter,
+        floor_level: 0,
+        ...this.createAuditTrail()
+      };
+
+      const floorPlan = await this.db.floor_plans.insert(floorPlanData);
+
+      // Create default room
+      const roomData: Room = {
+        id: this.generateId(),
+        name: 'Living Room',
+        floor_plan_id: floorPlan.id,
+        boundary_coordinates: JSON.stringify([
+          [100, 100], [500, 100], [500, 400], [100, 400]
+        ]), // Simple rectangle coordinates
+        room_type: RoomType.LIVING_ROOM,
+        area_sqm: 25,
+        ...this.createAuditTrail()
+      };
+
+      await this.db.rooms.insert(roomData);
+    } catch (error) {
+      this.handleError(error, 'createDefaultFloorPlanAndRoom');
     }
   }
 }

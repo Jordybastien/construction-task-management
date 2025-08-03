@@ -1,2 +1,2 @@
 export * from './constants';
-export * from './database-error';
+export * from './databaseErrors';
