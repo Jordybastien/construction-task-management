@@ -11,18 +11,37 @@ import { EntityActions } from '@/models/common';
 import { useTranslation } from 'react-i18next';
 import FloorPlanControls from './FloorPlanControls';
 import FloorPlanContent from './FloorPlanContent';
+import type { TaskWithDetails } from '@/database/dtos/task.dto';
 
 interface FloorPlanAreaProps {
   className: string;
+  tasks?: TaskWithDetails[];
 }
 
-const FloorPlanArea = ({ className }: FloorPlanAreaProps) => {
+const FloorPlanArea = ({ className, tasks }: FloorPlanAreaProps) => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedFloorPlan = useSelectedFloorPlan();
   const selectedRoom = useSelectedRoom();
   const setSelectedRoom = useSetSelectedRoom();
+
+  // Task selection handler
+  const handleTaskSelect = useCallback((task: TaskWithDetails) => {
+    const currentParams = Object.fromEntries(searchParams.entries());
+    setSearchParams({ ...currentParams, selectedTaskId: task.id });
+  }, [setSearchParams, searchParams]);
+
+  // Task creation handler  
+  const handleTaskCreate = useCallback((lat: number, lng: number) => {
+    const currentParams = Object.fromEntries(searchParams.entries());
+    setSearchParams({ 
+      ...currentParams, 
+      taskAction: EntityActions.ADD,
+      taskLat: lat.toString(),
+      taskLng: lng.toString()
+    });
+  }, [setSearchParams, searchParams]);
 
   const { rooms, isLoading: isLoadingRooms } = useFetchRoomsByFloorPlan(
     selectedFloorPlan?.id
@@ -110,12 +129,15 @@ const FloorPlanArea = ({ className }: FloorPlanAreaProps) => {
         <FloorPlanContent
           floorPlan={selectedFloorPlan}
           rooms={rooms}
+          tasks={tasks}
           selectedRoom={selectedRoom}
           isLoadingRooms={isLoadingRooms}
           isDeleteLoading={deleteRoom.isLoading}
           onRoomSelect={setSelectedRoom}
           onEditRoom={handleEditRoom}
           onDeleteRoom={handleDeleteRoom}
+          onTaskSelect={handleTaskSelect}
+          onTaskCreate={handleTaskCreate}
         />
       </div>
 

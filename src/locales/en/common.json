@@ -111,6 +111,7 @@
         "IN_PROGRESS": "In Progress",
         "BLOCKED": "Blocked",
         "FINAL_CHECK": "Final Check",
+        "DONE": "Done",
         "ADD_TASK": "Add Task",
         "PROGRESS": "Progress",
         "CHECKLIST": "Checklist",
@@ -174,6 +175,8 @@
         "NO_HISTORY": "No history available for this task",
         "STATUS_CHANGED_FROM": "Status changed from",
         "NO_ROOM_ASSIGNED": "No room assigned",
+        "DETAILS": "Task Details",
+        "VIEW_DETAILS": "View and manage task details",
         "PRIORITY": {
           "LOW": "Low",
           "MEDIUM": "Medium",

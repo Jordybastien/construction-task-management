@@ -51,6 +51,15 @@ const TasksList = ({
     [tasks, modalTaskId]
   );
 
+  const presetCoordinates = useMemo(() => {
+    const lat = searchParams.get('taskLat');
+    const lng = searchParams.get('taskLng');
+    if (lat && lng) {
+      return { lat: parseFloat(lat), lng: parseFloat(lng) };
+    }
+    return undefined;
+  }, [searchParams]);
+
   const openModal = useCallback(
     (entityAction: EntityActions, taskId: string | null = null) => {
       const currentParams = Object.fromEntries(searchParams.entries());
@@ -67,6 +76,8 @@ const TasksList = ({
     const newParams = new URLSearchParams(searchParams);
     newParams.delete('taskAction');
     newParams.delete('taskId');
+    newParams.delete('taskLat');
+    newParams.delete('taskLng');
     setSearchParams(newParams);
   }, [setSearchParams, searchParams]);
 
@@ -143,6 +154,7 @@ const TasksList = ({
         }
         onClose={closeModal}
         task={selectedTaskForModal}
+        addPresetCoordinates={presetCoordinates}
       />
 
       <DeleteTaskModal

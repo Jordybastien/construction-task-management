@@ -42,13 +42,13 @@ export const taskSchema: RxJsonSchema<TaskDocType> = {
     },
     position_lat: {
       type: 'number',
-      minimum: -180,
-      maximum: 180,
+      minimum: -10000,
+      maximum: 10000,
     },
     position_lng: {
       type: 'number',
-      minimum: -180,
-      maximum: 180,
+      minimum: -10000,
+      maximum: 10000,
     },
     status: {
       type: 'string',

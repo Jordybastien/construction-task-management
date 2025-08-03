@@ -1,35 +1,41 @@
 import { useTranslation } from 'react-i18next';
 import EmptyIllustration from '@/components/emptyIllustration';
 import FloorPlanAreaSkeleton from './FloorPlanAreaSkeleton';
-import FloorPlanImage from './FloorPlanImage';
+import LeafletFloorPlan from './LeafletFloorPlan';
 import RoomsList from './RoomsList';
 import type { RoomWithStats } from '@/database/dtos/room.dto';
 import type { FloorPlanWithStats } from '@/database/dtos/floorPlan.dto';
+import type { TaskWithDetails } from '@/database/dtos/task.dto';
 
 interface FloorPlanContentProps {
   floorPlan: FloorPlanWithStats | null;
   rooms: RoomWithStats[];
+  tasks?: TaskWithDetails[];
   selectedRoom: RoomWithStats | null;
   isLoadingRooms: boolean;
   isDeleteLoading: boolean;
   onRoomSelect: (room: RoomWithStats) => void;
   onEditRoom: (roomId: string) => void;
   onDeleteRoom: (room: RoomWithStats) => void;
+  onTaskSelect?: (task: TaskWithDetails) => void;
+  onTaskCreate?: (lat: number, lng: number) => void;
 }
 
 const FloorPlanContent = ({
   floorPlan,
   rooms,
+  tasks,
   selectedRoom,
   isLoadingRooms,
   isDeleteLoading,
   onRoomSelect,
   onEditRoom,
   onDeleteRoom,
+  onTaskSelect,
+  onTaskCreate,
 }: FloorPlanContentProps) => {
   const { t } = useTranslation();
 
-  // No floor plan selected
   if (!floorPlan) {
     return (
       <div className="flex h-64 items-center justify-center">
@@ -40,15 +46,20 @@ const FloorPlanContent = ({
     );
   }
 
-  // Loading state
   if (isLoadingRooms) {
     return <FloorPlanAreaSkeleton />;
   }
 
-  // Floor plan with content
   return (
     <div className="space-y-4">
-      <FloorPlanImage floorPlan={floorPlan} />
+      <LeafletFloorPlan 
+        floorPlan={floorPlan}
+        tasks={tasks}
+        rooms={rooms}
+        onRoomSelect={onRoomSelect}
+        onTaskSelect={onTaskSelect}
+        onTaskCreate={onTaskCreate}
+      />
 
       <div>
         <h4 className="mb-2 font-medium text-gray-900">

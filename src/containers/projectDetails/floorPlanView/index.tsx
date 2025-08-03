@@ -15,7 +15,10 @@ const FloorPlanView = () => {
         tasks={tasks}
         isLoading={isLoading}
       />
-      <FloorPlanArea className="hidden lg:block lg:sticky lg:top-40" />
+      <FloorPlanArea 
+        className="hidden lg:block lg:sticky lg:top-40" 
+        tasks={tasks}
+      />
       <TaskDetails />
     </div>
   );
