@@ -42,12 +42,16 @@ interface AddOrEditTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   task?: TaskWithDetails | null;
+  addPresetStatus?: TaskStatus;
+  addPresetCoordinates?: { lat: number; lng: number };
 }
 
 const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
   isOpen,
   onClose,
   task,
+  addPresetStatus,
+  addPresetCoordinates,
 }) => {
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
@@ -59,13 +63,11 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
 
   const formSchema = z.object({
     title: z.string().min(2, {
-      message:
-        t('PAGES.PROJECT_DETAILS.TASK.FORM.TITLE.ERRORS.INVALID'),
+      message: t('PAGES.PROJECT_DETAILS.TASK.FORM.TITLE.ERRORS.INVALID'),
     }),
     description: z.string().optional(),
     room_id: z.string().min(1, {
-      message:
-        t('PAGES.PROJECT_DETAILS.TASK.FORM.ROOM.ERRORS.REQUIRED'),
+      message: t('PAGES.PROJECT_DETAILS.TASK.FORM.ROOM.ERRORS.REQUIRED'),
     }),
     status: z.nativeEnum(TaskStatus).optional(),
     position_lat: z.number().optional(),
@@ -78,9 +80,9 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
       title: '',
       description: '',
       room_id: '',
-      status: TaskStatus.NOT_STARTED,
-      position_lat: 50,
-      position_lng: 50,
+      status: addPresetStatus || TaskStatus.NOT_STARTED,
+      position_lat: addPresetCoordinates?.lat || 50,
+      position_lng: addPresetCoordinates?.lng || 50,
     },
   });
 
@@ -95,7 +97,18 @@ const AddOrEditTaskModal: React.FC<AddOrEditTaskModalProps> = ({
         position_lng: task.position_lng,
       });
     }
-  }, [isEditing, task, form]);
+
+    if (!isEditing && (addPresetStatus || addPresetCoordinates)) {
+      form.reset({
+        title: '',
+        description: '',
+        room_id: '',
+        status: addPresetStatus || TaskStatus.NOT_STARTED,
+        position_lat: addPresetCoordinates?.lat || 50,
+        position_lng: addPresetCoordinates?.lng || 50,
+      });
+    }
+  }, [isEditing, task, addPresetStatus, addPresetCoordinates, form]);
 
   const { mutate: createTask, isLoading: isCreating } = useCreateTask({
     onSuccess: () => {

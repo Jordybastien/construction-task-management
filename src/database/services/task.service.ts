@@ -17,7 +17,7 @@ export class TaskService extends BaseService {
       const taskData: Task = {
         id: this.generateId(),
         ...dto,
-        status: TaskStatus.NOT_STARTED,
+        status: dto.status || TaskStatus.NOT_STARTED,
         ...this.createAuditTrail(),
       };
 
