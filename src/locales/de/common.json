@@ -1,1 +1,387 @@
-{}
+{
+  "COMMON": {
+    "COMPLETED": "abgeschlossen",
+    "OF": "von",
+    "TO": "zu",
+    "UNKNOWN_USER": "Unbekannter Benutzer",
+    "VIEW_MORE": "Mehr anzeigen",
+    "VIEW_LESS": "Weniger anzeigen",
+    "CANCEL": "Abbrechen",
+    "SAVE": "Speichern",
+    "DELETE": "Löschen"
+  },
+  "PAGES": {
+    "LOGIN": {
+      "TITLE": "Anmelden",
+      "DESCRIPTION": "Melden Sie sich an, um auf den Bauaufgaben-Manager zuzugreifen",
+      "WELCOME_BACK": "Willkommen zurück",
+      "TESTIMONIAL": "Dieser Bauaufgaben-Manager hat revolutioniert, wie wir unsere Projekte verwalten. Die Effizienzsteigerungen sind bemerkenswert!",
+      "FORM": {
+        "NAME": {
+          "LABEL": "Name",
+          "PLACEHOLDER": "Geben Sie Ihren Namen ein",
+          "ERRORS": {
+            "INVALID": "Name muss mindestens 2 Zeichen lang sein"
+          }
+        },
+        "SIGN_IN": "Anmelden"
+      }
+    },
+    "HOME": {
+      "TITLE": "Startseite",
+      "PROJECT_NAME": "Projekt",
+      "SAMPLE_DESCRIPTION": "Beispiel-Projektbeschreibung",
+      "HEADER": {
+        "APP_TITLE": "Bauaufgaben-Manager",
+        "WELCOME_USER": "Willkommen, Max Mustermann"
+      },
+      "PROJECT_SELECTION": {
+        "TITLE": "Projekt auswählen",
+        "DESCRIPTION": "Wählen Sie ein bestehendes Projekt aus oder erstellen Sie ein neues, um mit der Verwaltung von Bauaufgaben zu beginnen"
+      },
+      "SEARCH": {
+        "PLACEHOLDER": "Projekte suchen..."
+      },
+      "ACTIONS": {
+        "NEW_PROJECT": "NEUES PROJEKT",
+        "CREATE_PROJECT": "PROJEKT ERSTELLEN"
+      },
+      "EMPTY_STATE": {
+        "NO_PROJECTS": "Keine Projekte gefunden. Erstellen Sie Ihr erstes Projekt, um zu beginnen!"
+      },
+      "CREATE_PROJECT": {
+        "TITLE": "Neues Projekt erstellen",
+        "DESCRIPTION": "Starten Sie ein neues Bauprojekt mit Grundrissen und Aufgabenverwaltung"
+      }
+    },
+    "PROJECT_DETAILS": {
+      "TITLE": "Projektdetails",
+      "PROJECT_INFORMATION": "Projektinformationen",
+      "DETAILS_ABOUT_PROJECT": "Details zum Projekt",
+      "PROJECT_NAME_LABEL": "Projektname",
+      "SAMPLE_PROJECT": "Beispielprojekt",
+      "STATUS_LABEL": "Status",
+      "IN_PROGRESS": "In Bearbeitung",
+      "SELECT_FLOOR_PLAN": "Grundriss auswählen",
+      "HEADER": {
+        "TITLE": "Bauaufgaben-Manager - Bürokomplex Innenstadt"
+      },
+      "VIEWS": {
+        "FLOOR_PLAN": "Grundriss",
+        "KANBAN": "Kanban"
+      },
+      "STATISTICS": {
+        "TOTAL_TASKS": "Gesamtaufgaben",
+        "COMPLETED_TASKS": "Abgeschlossene Aufgaben",
+        "ROOMS": "Räume",
+        "WITH_TASKS": "mit Aufgaben",
+        "IN_PROGRESS": "In Bearbeitung",
+        "BLOCKED": "blockiert"
+      },
+      "FLOOR_PLAN": {
+        "TITLE": "Grundriss",
+        "TASKS": "Aufgaben",
+        "TASK_DETAILS": "Aufgabendetails",
+        "CLICK_TASK_MARKER": "Klicken Sie auf eine Aufgabe oder Markierung, um Details anzuzeigen",
+        "SELECT_TASK": "Wählen Sie eine Aufgabe aus, um Details anzuzeigen",
+        "STATUS_LEGEND": "Aufgabenstatus:",
+        "NOT_STARTED": "Nicht begonnen",
+        "IN_PROGRESS": "In Bearbeitung",
+        "BLOCKED": "Blockiert",
+        "FINAL_CHECK": "Endkontrolle",
+        "DONE": "Fertig",
+        "FOOTER_TEXT": "Klicken Sie irgendwo auf den Grundriss, um eine Aufgabe an dieser Stelle zu erstellen",
+        "NO_TASKS": "Keine Aufgaben für diesen Grundriss gefunden. Erstellen Sie Ihre erste Aufgabe, um zu beginnen!",
+        "SELECT_FLOOR_PLAN": "Bitte wählen Sie einen Grundriss zum Anzeigen aus",
+        "NO_IMAGE": "Kein Grundrissbild verfügbar",
+        "CONTROLS": {
+          "ZOOM_IN": "Vergrößern",
+          "ZOOM_OUT": "Verkleinern",
+          "FIT": "An Ansicht anpassen"
+        }
+      },
+      "KANBAN": {
+        "TITLE": "Kanban",
+        "TOTAL_TASKS": "Gesamtaufgaben",
+        "FILTERS": "Filter:",
+        "ALL_ROOMS": "Alle Räume",
+        "ALL_USERS": "Alle Benutzer",
+        "PRIORITY": "Priorität",
+        "NOT_STARTED": "Nicht begonnen",
+        "IN_PROGRESS": "In Bearbeitung",
+        "BLOCKED": "Blockiert",
+        "FINAL_CHECK": "Endkontrolle",
+        "DONE": "Fertig",
+        "ADD_TASK": "Aufgabe hinzufügen",
+        "PROGRESS": "Fortschritt",
+        "CHECKLIST": "Checkliste",
+        "ASSIGNEE": "Zugewiesen an",
+        "LAST_UPDATED": "Zuletzt aktualisiert"
+      },
+      "ROOM": {
+        "ADD_ROOM": "Raum hinzufügen",
+        "ROOMS_LIST": "Räume",
+        "NO_ROOMS": "Keine Räume für diesen Grundriss gefunden. Fügen Sie Ihren ersten Raum hinzu, um zu beginnen!",
+        "TASKS": "Aufgaben",
+        "MODAL": {
+          "CREATE_TITLE": "Raum hinzufügen",
+          "CREATE_DESCRIPTION": "Einen neuen Raum zum Grundriss hinzufügen",
+          "EDIT_TITLE": "Raum bearbeiten",
+          "EDIT_DESCRIPTION": "Die Raumdetails aktualisieren"
+        },
+        "FORM": {
+          "NAME": {
+            "LABEL": "Raumname",
+            "PLACEHOLDER": "Raumname eingeben",
+            "ERRORS": {
+              "REQUIRED": "Raumname ist erforderlich",
+              "TOO_LONG": "Raumname muss weniger als 100 Zeichen haben"
+            }
+          },
+          "TYPE": {
+            "LABEL": "Raumtyp",
+            "PLACEHOLDER": "Raumtyp auswählen"
+          },
+          "AREA": {
+            "LABEL": "Fläche (m²)",
+            "PLACEHOLDER": "Raumfläche in Quadratmetern eingeben",
+            "ERRORS": {
+              "INVALID": "Fläche muss eine positive Zahl sein"
+            }
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Raum erfolgreich erstellt!",
+            "UPDATE_MESSAGE": "Raum erfolgreich aktualisiert!",
+            "DELETE_MESSAGE": "Raum erfolgreich gelöscht!"
+          },
+          "ERROR": {
+            "DELETE_MESSAGE": "Raum konnte nicht gelöscht werden"
+          }
+        }
+      },
+      "TASK": {
+        "NEW": "NEU",
+        "FILTER_SEARCH": "Filtern & Suchen",
+        "SEARCH_PLACEHOLDER": "Aufgaben suchen...",
+        "ROOM": "Raum:",
+        "PROGRESS": "Fortschritt:",
+        "ITEMS_DONE": "Elemente abgeschlossen",
+        "STATUS": "Status:",
+        "CHECKLIST_COMPLETED": "abgeschlossen",
+        "EDIT_TASK": "AUFGABE BEARBEITEN",
+        "ADD_COMMENT": "KOMMENTAR HINZUFÜGEN",
+        "CREATED_BY": "Erstellt von",
+        "HISTORY": "Verlauf",
+        "NO_HISTORY": "Kein Verlauf für diese Aufgabe verfügbar",
+        "STATUS_CHANGED_FROM": "Status geändert von",
+        "NO_ROOM_ASSIGNED": "Kein Raum zugewiesen",
+        "DETAILS": "Aufgabendetails",
+        "VIEW_DETAILS": "Aufgabendetails anzeigen und verwalten",
+        "PRIORITY": {
+          "LOW": "Niedrig",
+          "MEDIUM": "Mittel",
+          "HIGH": "Hoch"
+        },
+        "MODAL": {
+          "CREATE_TITLE": "Neue Aufgabe erstellen",
+          "CREATE_DESCRIPTION": "Füllen Sie die Details aus, um eine neue Aufgabe zu erstellen",
+          "EDIT_TITLE": "Aufgabe bearbeiten",
+          "EDIT_DESCRIPTION": "Die Aufgabendetails aktualisieren"
+        },
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Aufgabentitel",
+            "PLACEHOLDER": "Aufgabentitel eingeben",
+            "ERRORS": {
+              "INVALID": "Aufgabentitel muss mindestens 2 Zeichen haben"
+            }
+          },
+          "DESCRIPTION": {
+            "LABEL": "Beschreibung",
+            "PLACEHOLDER": "Aufgabenbeschreibung eingeben (optional)"
+          },
+          "ROOM": {
+            "LABEL": "Raum",
+            "PLACEHOLDER": "Raum auswählen",
+            "NO_ROOM": "Kein spezifischer Raum",
+            "ERRORS": {
+              "REQUIRED": "Bitte wählen Sie einen Raum aus"
+            }
+          },
+          "STATUS": {
+            "LABEL": "Status",
+            "PLACEHOLDER": "Status auswählen"
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Aufgabe erfolgreich erstellt!",
+            "UPDATE_MESSAGE": "Aufgabe erfolgreich aktualisiert!",
+            "DELETE_MESSAGE": "Aufgabe erfolgreich gelöscht!"
+          },
+          "DELETE": {
+            "TITLE": "Aufgabe löschen",
+            "DESCRIPTION": "Sind Sie sicher, dass Sie \"{{taskName}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+          }
+        }
+      },
+      "CHECKLIST": {
+        "ADD_ITEM": "Element hinzufügen",
+        "NO_ITEMS": "Keine Checklisten-Elemente gefunden. Fügen Sie Ihr erstes Element hinzu, um zu beginnen!",
+        "MODAL": {
+          "CREATE_TITLE": "Checklisten-Element hinzufügen",
+          "CREATE_DESCRIPTION": "Ein neues Element zur Aufgaben-Checkliste hinzufügen",
+          "EDIT_TITLE": "Checklisten-Element bearbeiten",
+          "EDIT_DESCRIPTION": "Die Details des Checklisten-Elements aktualisieren"
+        },
+        "FORM": {
+          "TITLE": {
+            "LABEL": "Element-Titel",
+            "PLACEHOLDER": "Titel des Checklisten-Elements eingeben",
+            "ERRORS": {
+              "REQUIRED": "Titel ist erforderlich",
+              "TOO_LONG": "Titel muss weniger als 200 Zeichen haben"
+            }
+          },
+          "DESCRIPTION": {
+            "LABEL": "Beschreibung",
+            "PLACEHOLDER": "Beschreibung eingeben (optional)",
+            "ERRORS": {
+              "TOO_LONG": "Beschreibung muss weniger als 1000 Zeichen haben"
+            }
+          },
+          "STATUS": {
+            "LABEL": "Status",
+            "PLACEHOLDER": "Status auswählen"
+          },
+          "SUCCESS": {
+            "CREATE_MESSAGE": "Checklisten-Element erfolgreich erstellt!",
+            "UPDATE_MESSAGE": "Checklisten-Element erfolgreich aktualisiert!",
+            "DELETE_MESSAGE": "Checklisten-Element erfolgreich gelöscht!"
+          },
+          "ERROR": {
+            "UPDATE_MESSAGE": "Checklisten-Element konnte nicht aktualisiert werden",
+            "DELETE_MESSAGE": "Checklisten-Element konnte nicht gelöscht werden"
+          },
+          "DELETE": {
+            "TITLE": "Checklisten-Element löschen",
+            "DESCRIPTION": "Sind Sie sicher, dass Sie \"{{itemTitle}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+          }
+        }
+      }
+    },
+    "PROJECT": {
+      "MODAL": {
+        "CREATE_TITLE": "Neues Projekt erstellen",
+        "CREATE_DESCRIPTION": "Füllen Sie die Details aus, um ein neues Bauprojekt zu erstellen",
+        "EDIT_TITLE": "Projekt bearbeiten",
+        "EDIT_DESCRIPTION": "Die Projektdetails aktualisieren"
+      },
+      "FORM": {
+        "NAME": {
+          "LABEL": "Projektname",
+          "PLACEHOLDER": "Projektname eingeben",
+          "ERRORS": {
+            "INVALID": "Projektname muss mindestens 2 Zeichen lang sein"
+          }
+        },
+        "DESCRIPTION": {
+          "LABEL": "Beschreibung",
+          "PLACEHOLDER": "Projektbeschreibung eingeben (optional)"
+        },
+        "STATUS": {
+          "LABEL": "Status",
+          "PLACEHOLDER": "Projektstatus auswählen"
+        },
+        "SUCCESS": {
+          "CREATE_MESSAGE": "Projekt erfolgreich erstellt!",
+          "UPDATE_MESSAGE": "Projekt erfolgreich aktualisiert!",
+          "DELETE_MESSAGE": "Projekt erfolgreich gelöscht!"
+        },
+        "DELETE": {
+          "TITLE": "Projekt löschen",
+          "DESCRIPTION": "Sind Sie sicher, dass Sie \"{{projectName}}\" löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden."
+        }
+      }
+    },
+    "NOT_FOUND": {
+      "TITLE": "Seite nicht gefunden",
+      "MESSAGE": "Die Seite, die Sie suchen, existiert nicht."
+    }
+  },
+  "LAYOUTS": {
+    "HEADER": {
+      "APP_TITLE": "Bauaufgaben-Manager",
+      "NAVIGATION": {
+        "PROJECTS": "Projekte",
+        "SETTINGS": "Einstellungen",
+        "LOGOUT": "Abmelden"
+      }
+    }
+  },
+  "ATTRIBUTES": {
+    "PROJECT": {
+      "STATUS_ENUM": {
+        "ACTIVE": "Aktiv",
+        "PLANNING": "Planung",
+        "ON_HOLD": "Pausiert",
+        "COMPLETED": "Abgeschlossen"
+      }
+    },
+    "TASK": {
+      "STATUS_ENUM": {
+        "NOT_STARTED": "Nicht begonnen",
+        "IN_PROGRESS": "In Bearbeitung",
+        "BLOCKED": "Blockiert",
+        "FINAL_CHECK": "Endkontrolle",
+        "DONE": "Fertig"
+      }
+    },
+    "ROOM": {
+      "TYPE_ENUM": {
+        "KITCHEN": "Küche",
+        "BEDROOM": "Schlafzimmer",
+        "BATHROOM": "Badezimmer",
+        "LIVING_ROOM": "Wohnzimmer",
+        "DINING_ROOM": "Esszimmer",
+        "OFFICE": "Büro",
+        "GARAGE": "Garage",
+        "BASEMENT": "Keller",
+        "ATTIC": "Dachboden",
+        "HALLWAY": "Flur",
+        "STAIRS": "Treppe",
+        "UTILITY": "Hauswirtschaftsraum",
+        "STORAGE": "Lager",
+        "OTHER": "Sonstiges"
+      }
+    }
+  },
+  "COMPONENTS": {
+    "PROJECT_CARD": {
+      "TASKS": "Aufgaben",
+      "PROGRESS": "Fortschritt",
+      "LAST_UPDATED": "Zuletzt aktualisiert"
+    }
+  },
+  "COOKIE_CONSENT": {
+    "TITLE": "Wir verwenden Cookies",
+    "SUB_TEXT": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern und unseren Traffic zu analysieren. Durch Klicken auf 'Akzeptieren' stimmen Sie unserer Verwendung von Cookies zu."
+  },
+  "HELPERS": {
+    "ACTIONS": {
+      "ACCEPT": "Akzeptieren",
+      "DECLINE": "Ablehnen",
+      "CREATE": "Erstellen",
+      "UPDATE": "Aktualisieren",
+      "CANCEL": "Abbrechen",
+      "ACTIONS": "Aktionen",
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen"
+    }
+  },
+  "LOCALES": {
+    "EN": "English",
+    "DE": "Deutsch"
+  },
+  "ERRORS": {
+    "UNABLE_TO_PROCEED": "Kann nicht fortfahren"
+  }
+}

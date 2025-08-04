@@ -43,25 +43,33 @@ export const PREDEFINED_FLOOR_PLANS = [
     image_width: 1536,
     image_height: 1024,
     scale_pixels_per_meter: 40,
-    description: '20m x 15m office building with reception, offices, conference room'
+    description:
+      '20m x 15m office building with reception, offices, conference room',
+    rooms: [
+      {
+        name: 'Storage Unit',
+        boundary_coordinates:
+          '[[125, 800], [590, 800], [590, 1336], [125, 1336]]',
+      },
+    ],
   },
   {
-    id: 'plan-b', 
+    id: 'plan-b',
     name: 'Residential House',
     image_url: '/assets/plans/2.png',
     image_width: 1536,
     image_height: 1024,
     scale_pixels_per_meter: 32,
-    description: '25m x 18m house with living areas, bedrooms, bathrooms'
+    description: '25m x 18m house with living areas, bedrooms, bathrooms',
   },
   {
     id: 'plan-c',
     name: 'Small Warehouse',
-    image_url: '/assets/plans/3.png', 
+    image_url: '/assets/plans/3.png',
     image_width: 1536,
     image_height: 1024,
     scale_pixels_per_meter: 24,
-    description: '40m x 20m warehouse with storage, loading dock, office'
+    description: '40m x 20m warehouse with storage, loading dock, office',
   },
   // {
   //   id: 'plan-d',

@@ -1,0 +1,5 @@
+# Storybook static files
+/storybook/* /storybook/:splat 200
+
+# SPA fallback for main app
+/* /index.html 200
