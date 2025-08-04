@@ -166,6 +166,7 @@ const LeafletFloorPlan = ({
           fillColor: '#3b82f6',
           fillOpacity: 0.1,
           weight: 2,
+          className: 'custom-room-polygon',
         }).addTo(map);
 
         // Add tooltip with room name
@@ -199,7 +200,7 @@ const LeafletFloorPlan = ({
   }, [rooms, onRoomSelect]);
 
   return (
-    <div className="relative">
+    <div className="relative floor-plan-map-container">
       <div
         ref={mapContainerRef}
         className="h-[400px] w-full rounded-lg border-2 border-gray-200 bg-white"

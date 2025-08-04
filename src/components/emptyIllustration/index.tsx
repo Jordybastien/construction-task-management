@@ -1,4 +1,3 @@
-import React from 'react';
 import Typography from '@/components/typography';
 import { Button } from '@/components/ui/button';
 
@@ -24,7 +23,7 @@ const EmptyIllustration = ({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center py-4 text-center">
+    <div className="flex flex-col items-center justify-center py-4 text-center empty-state">
       <img
         src="/assets/empty-box.svg"
         width={SIZES[size]}

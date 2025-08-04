@@ -7,6 +7,7 @@
 [![RxDB](https://img.shields.io/badge/RxDB-16.16.0-FF6B35?logo=database&logoColor=white)](https://rxdb.info/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.19-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Playwright Tests](https://github.com/your-username/construction-task-manager/actions/workflows/playwright.yml/badge.svg)](https://github.com/your-username/construction-task-manager/actions/workflows/playwright.yml)
 
 ## 🎯 Overview
 
@@ -30,6 +31,11 @@ A sophisticated construction task management system that enables teams to create
 ## Low fidelity mockups/wireframes
 
 [Link to Low-fidelity Wireframes](https://www.figma.com/design/BfzXWo0SkqSPBBD3YVK0Mc/Construction-Task-Manager?node-id=2-4&t=Zv0hfFTogTUmfkRc-1)
+
+
+## Components(Storybook)
+
+[Components library](https://construction-task-management.vercel.app/storybook?path=/docs/containers-projectcard--docs)
 
 
 ## ✨ Key Features
@@ -413,24 +419,155 @@ export const createProject = async (payload: CreateProjectDto): Promise<Project>
 
 ## 🧪 Testing Strategy
 
+### **Running Tests**
+
 ```bash
-# Unit tests
-npm run test
+# E2E tests (Playwright)
+npm run test:e2e              # Run all E2E tests
+npm run test:e2e:ui           # Run with Playwright UI
+npm run test:e2e:headed       # Run in headed mode (browser visible)
+npm run test:e2e:debug        # Debug mode with inspector
+npm run test:e2e:report       # View test report
 
-# Integration tests
-npm run test:integration
+# Run specific test files
+npm run test:e2e -- e2e/tests/login.spec.ts
+npm run test:e2e -- e2e/tests/home.spec.ts
+npm run test:e2e -- e2e/tests/projectDetails/floorplan.spec.ts
 
-# E2E tests
-npm run test:e2e
-
-# Coverage report
-npm run test:coverage
+# Unit tests (Future implementation)
+npm run test                  # Run unit tests
+npm run test:coverage         # Generate coverage report
 ```
 
-**Testing Architecture:**
-- **Unit Tests**: Individual component and utility function testing
-- **Integration Tests**: Database service and API integration testing
-- **E2E Tests**: Complete user workflow automation
+### **Test Coverage & Status**
+
+| Test Suite | Status | Coverage | Notes |
+|------------|--------|----------|-------|
+| **Login Flow** | ✅ Passing | 100% | Complete user authentication workflow |
+| **Home Page** | ✅ Passing | 90% | Project listing, creation, navigation |
+| **Floor Plan View** | ⚠️ Partial | 60% | Basic layout tests, simplified due to complexity |
+| **Kanban View** | ❌ Skipped | 0% | Blocked by UI element conflicts (see tech debt) |
+| **Unit Tests** | ❌ Not Implemented | 0% | Time constraint - see tech debt section |
+
+### **Known Testing Limitations & Tech Debt**
+
+> **⚠️ Due to time constraints, several testing areas need improvement in production:**
+
+#### **1. E2E Test Implementation Issues**
+
+```typescript
+// ❌ Current: Generic selectors without data-testid
+await page.click('button:has-text("Create Project")');
+await page.click('.group.cursor-pointer');
+
+// ✅ Production: Proper test selectors
+await page.click('[data-testid="create-project-button"]');
+await page.click('[data-testid="project-card"]');
+```
+
+**Problems:**
+- **Brittle Selectors**: Tests break when CSS classes or text content changes
+- **Poor Maintainability**: Difficult to update when UI evolves
+- **Flaky Tests**: Generic selectors may match multiple elements
+
+
+#### **2. Missing Unit Test Coverage**
+
+```bash
+# ❌ Current: No unit tests implemented
+src/
+├── components/        # 0% test coverage
+├── hooks/            # 0% test coverage  
+├── services/         # 0% test coverage
+├── stores/           # 0% test coverage
+└── utils/            # 0% test coverage
+
+# ✅ Production: Comprehensive unit testing needed
+src/
+├── __tests__/
+│   ├── components/
+│   ├── hooks/
+│   ├── services/
+│   └── utils/
+```
+
+**Critical Missing Tests:**
+- **Custom Hooks**: Data fetching, state management, error handling
+- **Database Services**: CRUD operations, complex queries, error scenarios
+- **Utility Functions**: Coordinate transformations, validation, calculations
+- **Component Logic**: User interactions, state updates, error boundaries
+
+#### **5. Integration Test Gaps**
+
+```typescript
+// Missing: Database service integration tests
+describe('TaskService Integration', () => {
+  test('should handle complex task queries with spatial filtering', async () => {
+    // Test room boundary filtering
+    // Test coordinate range queries
+    // Test task status aggregations
+  });
+});
+
+// Missing: API service integration tests  
+describe('API Integration', () => {
+  test('should gracefully handle network failures', async () => {
+    // Test offline fallback behavior
+    // Test sync conflict resolution
+    // Test data consistency
+  });
+});
+```
+
+### **Production Testing Roadmap**
+
+#### **Phase 1: Fix Existing E2E Tests (2-3 days)**
+1. **Add data-testid attributes** throughout the application
+2. **Fix kanban UI conflicts** - implement proper toast dismissal
+3. **Enhance floor plan tests** - add interaction and task creation tests
+4. **Improve test reliability** - add proper waits and error handling
+
+#### **Phase 2: Unit Test Implementation (3-4 days)**
+1. **Setup Vitest configuration** with proper coverage thresholds
+2. **Component testing** with React Testing Library
+3. **Custom hook testing** with renderHook utilities
+4. **Service layer testing** with database mocking
+5. **Utility function testing** with edge case coverage
+
+#### **Phase 3: Integration Testing (2-3 days)**
+1. **Database service integration** tests with real RxDB instances
+2. **API integration tests** with MSW (Mock Service Worker)
+3. **Cross-browser testing** expansion
+4. **Performance testing** with Lighthouse CI
+
+#### **Phase 4: Advanced Testing (2-3 days)**
+1. **Visual regression testing** with Playwright screenshots
+2. **Accessibility testing** with axe-playwright
+3. **Mobile responsive testing** across device viewports
+4. **Performance benchmarking** with load testing with Playwright simulating rapid UI actions programmatically
+
+**Estimated Total: 9-13 days for production-ready test coverage**
+
+### **Test Architecture Goals**
+
+```typescript
+// Target test coverage thresholds
+export const coverageThresholds = {
+  global: {
+    branches: 85,
+    functions: 85, 
+    lines: 85,
+    statements: 85
+  },
+  // Critical business logic requires higher coverage
+  'src/services/': {
+    branches: 95,
+    functions: 95,
+    lines: 95,
+    statements: 95
+  }
+};
+```
 
 ## 📊 Performance Optimization
 
@@ -524,7 +661,32 @@ const supportedLanguages = ['en', 'de'];
 > **Due to limited time, here are the key areas I would improve in a production environment:**
 
 ### **Technical Debt**
-1. **Component Optimization**
+
+1. **Testing Infrastructure (High Priority)**
+   ```typescript
+   // ❌ Current: Minimal test coverage with brittle selectors
+   test('should create project', async () => {
+     await page.click('button:has-text("Create Project")'); // Brittle
+     await page.fill('input[name="name"]', 'Test Project');  // Generic
+   });
+   
+   // ✅ Better: Comprehensive testing with proper selectors
+   test('should create project', async () => {
+     await page.click('[data-testid="create-project-button"]');
+     await page.fill('[data-testid="project-name-input"]', 'Test Project');
+     await expect(page.locator('[data-testid="project-card"]')).toBeVisible();
+   });
+   ```
+   
+   **Critical Issues:**
+   - **E2E Tests**: Kanban tests completely skipped due to UI conflicts
+   - **Unit Tests**: 0% coverage across entire codebase
+   - **Brittle Selectors**: Tests break on CSS/content changes
+   - **No Integration Tests**: Database and API layers untested
+   
+   **Impact**: Production deployments without proper test validation
+
+2. **Component Optimization**
    ```typescript
    // Current: Multiple useEffect hooks in LeafletFloorPlan
    // Better: Custom hook for map lifecycle management
@@ -533,7 +695,7 @@ const supportedLanguages = ['en', 'de'];
    };
    ```
 
-2. **Floor Plan System Limitations**
+3. **Floor Plan System Limitations**
    ```typescript
    // Current: Fixed predefined floor plans only
    export const PREDEFINED_FLOOR_PLANS = [
