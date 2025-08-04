@@ -12,6 +12,7 @@ interface FloorPlanContentProps {
   rooms: RoomWithStats[];
   tasks?: TaskWithDetails[];
   selectedRoom: RoomWithStats | null;
+  showRooms?: boolean;
   isLoadingRooms: boolean;
   isDeleteLoading: boolean;
   onRoomSelect: (room: RoomWithStats) => void;
@@ -26,6 +27,7 @@ const FloorPlanContent = ({
   rooms,
   tasks,
   selectedRoom,
+  showRooms,
   isLoadingRooms,
   isDeleteLoading,
   onRoomSelect,
@@ -56,6 +58,7 @@ const FloorPlanContent = ({
         floorPlan={floorPlan}
         tasks={tasks}
         rooms={rooms}
+        showRooms={showRooms}
         onRoomSelect={onRoomSelect}
         onTaskSelect={onTaskSelect}
         onTaskCreate={onTaskCreate}

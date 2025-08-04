@@ -97,7 +97,9 @@
         "CONTROLS": {
           "ZOOM_IN": "Vergrößern",
           "ZOOM_OUT": "Verkleinern",
-          "FIT": "An Ansicht anpassen"
+          "FIT": "An Ansicht anpassen",
+          "SHOW_ROOMS": "Räume anzeigen",
+          "HIDE_ROOMS": "Räume ausblenden"
         }
       },
       "KANBAN": {

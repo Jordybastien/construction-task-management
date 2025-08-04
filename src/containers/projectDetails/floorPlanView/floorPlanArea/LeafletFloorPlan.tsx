@@ -10,6 +10,7 @@ interface LeafletFloorPlanProps {
   floorPlan: FloorPlanWithStats;
   tasks?: TaskWithDetails[];
   rooms?: RoomWithStats[];
+  showRooms?: boolean;
   onTaskSelect?: (task: TaskWithDetails) => void;
   onTaskCreate?: (lat: number, lng: number) => void;
   onRoomSelect?: (room: RoomWithStats) => void;
@@ -29,12 +30,14 @@ const LeafletFloorPlan = ({
   floorPlan,
   tasks = [],
   rooms = [],
+  showRooms = true,
   onTaskSelect,
   onTaskCreate,
   onRoomSelect,
 }: LeafletFloorPlanProps) => {
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const roomLayersRef = useRef<L.Layer[]>([]);
 
   // Custom CRS for floor plan coordinates
   const customCRS = L.CRS.Simple;
@@ -147,7 +150,11 @@ const LeafletFloorPlan = ({
     const map = mapRef.current;
     if (!map || !rooms.length) return;
 
-    const roomLayers: L.Layer[] = [];
+    // Clear existing room layers
+    roomLayersRef.current.forEach((layer) => map.removeLayer(layer));
+    roomLayersRef.current = [];
+
+    if (!showRooms) return;
 
     rooms.forEach((room) => {
       try {
@@ -183,7 +190,7 @@ const LeafletFloorPlan = ({
           });
         }
 
-        roomLayers.push(polygon);
+        roomLayersRef.current.push(polygon);
       } catch (error) {
         console.warn(
           'Failed to parse room boundary coordinates:',
@@ -195,12 +202,13 @@ const LeafletFloorPlan = ({
 
     // Cleanup room layers on re-render
     return () => {
-      roomLayers.forEach((layer) => map.removeLayer(layer));
+      roomLayersRef.current.forEach((layer) => map.removeLayer(layer));
+      roomLayersRef.current = [];
     };
-  }, [rooms, onRoomSelect]);
+  }, [rooms, onRoomSelect, showRooms]);
 
   return (
-    <div className="relative floor-plan-map-container">
+    <div className="floor-plan-map-container relative">
       <div
         ref={mapContainerRef}
         className="h-[400px] w-full rounded-lg border-2 border-gray-200 bg-white"

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { twMerge } from 'tailwind-merge';
 import { useSelectedFloorPlan } from '@/stores/floorPlan.store';
@@ -21,27 +21,32 @@ interface FloorPlanAreaProps {
 const FloorPlanArea = ({ className, tasks }: FloorPlanAreaProps) => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const [showRooms, setShowRooms] = useState(true);
 
   const selectedFloorPlan = useSelectedFloorPlan();
   const selectedRoom = useSelectedRoom();
   const setSelectedRoom = useSetSelectedRoom();
 
-  // Task selection handler
-  const handleTaskSelect = useCallback((task: TaskWithDetails) => {
-    const currentParams = Object.fromEntries(searchParams.entries());
-    setSearchParams({ ...currentParams, selectedTaskId: task.id });
-  }, [setSearchParams, searchParams]);
+  const handleTaskSelect = useCallback(
+    (task: TaskWithDetails) => {
+      const currentParams = Object.fromEntries(searchParams.entries());
+      setSearchParams({ ...currentParams, selectedTaskId: task.id });
+    },
+    [setSearchParams, searchParams]
+  );
 
-  // Task creation handler  
-  const handleTaskCreate = useCallback((lat: number, lng: number) => {
-    const currentParams = Object.fromEntries(searchParams.entries());
-    setSearchParams({ 
-      ...currentParams, 
-      taskAction: EntityActions.ADD,
-      taskLat: lat.toString(),
-      taskLng: lng.toString()
-    });
-  }, [setSearchParams, searchParams]);
+  const handleTaskCreate = useCallback(
+    (lat: number, lng: number) => {
+      const currentParams = Object.fromEntries(searchParams.entries());
+      setSearchParams({
+        ...currentParams,
+        taskAction: EntityActions.ADD,
+        taskLat: lat.toString(),
+        taskLng: lng.toString(),
+      });
+    },
+    [setSearchParams, searchParams]
+  );
 
   const { rooms, isLoading: isLoadingRooms } = useFetchRoomsByFloorPlan(
     selectedFloorPlan?.id
@@ -118,19 +123,29 @@ const FloorPlanArea = ({ className, tasks }: FloorPlanAreaProps) => {
     openModal(EntityActions.ADD);
   };
 
-  const isAddEditModalOpen = 
+  const handleToggleRooms = () => {
+    setShowRooms(!showRooms);
+  };
+
+  const isAddEditModalOpen =
     isModalVisible(EntityActions.ADD) || isModalVisible(EntityActions.EDIT);
 
   return (
     <>
       <div className={twMerge('bg-gray-50 p-4', className)}>
-        <FloorPlanControls onAddRoom={handleAddRoom} />
-        
+        <FloorPlanControls
+          onAddRoom={handleAddRoom}
+          showRooms={showRooms}
+          onToggleRooms={handleToggleRooms}
+        />
+
+        {/* TODO: Not a big fan of so many props we can perhaps extract this into a custom functionality hook, refactor */}
         <FloorPlanContent
           floorPlan={selectedFloorPlan}
           rooms={rooms}
           tasks={tasks}
           selectedRoom={selectedRoom}
+          showRooms={showRooms}
           isLoadingRooms={isLoadingRooms}
           isDeleteLoading={deleteRoom.isLoading}
           onRoomSelect={setSelectedRoom}
