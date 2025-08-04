@@ -7,7 +7,7 @@
 [![RxDB](https://img.shields.io/badge/RxDB-16.16.0-FF6B35?logo=database&logoColor=white)](https://rxdb.info/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.19-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Playwright Tests](https://github.com/your-username/construction-task-manager/actions/workflows/playwright.yml/badge.svg)](https://github.com/your-username/construction-task-manager/actions/workflows/playwright.yml)
+[![Playwright Tests](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml/badge.svg?branch=main)](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml)
 
 ## 🎯 Overview
 
