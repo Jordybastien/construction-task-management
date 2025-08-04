@@ -16,7 +16,7 @@ const FloorPlanView = () => {
         isLoading={isLoading}
       />
       <FloorPlanArea 
-        className="hidden lg:block lg:sticky lg:top-40" 
+        className="lg:sticky lg:top-40" 
         tasks={tasks}
       />
       <TaskDetails />

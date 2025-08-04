@@ -97,7 +97,9 @@
         "CONTROLS": {
           "ZOOM_IN": "Zoom In",
           "ZOOM_OUT": "Zoom Out",
-          "FIT": "Fit to View"
+          "FIT": "Fit to View",
+          "SHOW_ROOMS": "Show Rooms",
+          "HIDE_ROOMS": "Hide Rooms"
         }
       },
       "KANBAN": {
