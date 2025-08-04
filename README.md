@@ -7,7 +7,7 @@
 [![RxDB](https://img.shields.io/badge/RxDB-16.16.0-FF6B35?logo=database&logoColor=white)](https://rxdb.info/)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9.4-199900?logo=leaflet&logoColor=white)](https://leafletjs.com/)
 [![Vite](https://img.shields.io/badge/Vite-5.4.19-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Playwright Tests](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml/badge.svg?branch=main)](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml)
+<!-- [![Playwright Tests](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml/badge.svg?branch=main)](https://github.com/Jordybastien/construction-task-management/actions/workflows/playwright.yml) -->
 
 ## 🎯 Overview
 
@@ -76,10 +76,15 @@ Component → Custom Hook → Zustand Store → Service Layer → RxDB → Index
 ```
 
 **1. Component Layer** - UI components request data through custom hooks
+
 **2. Hook Layer** - Data fetching with caching, error handling, and store integration
+
 **3. Store Layer** - Zustand stores for reactive state management and optimistic updates
+
 **4. Service Layer** - Repository pattern for database operations and API integration
+
 **5. Database Layer** - RxDB for offline-first, reactive data persistence
+
 
 ## 📁 Project Structure
 
@@ -142,7 +147,7 @@ npm run dev
 
 ### Environment Setup
 
-Create a `.env.local` file:
+Create a `.env` file:
 
 ```env
 VITE_API_BASE_URL=http://localhost:3001/api
@@ -153,7 +158,7 @@ VITE_OFFLINE_MODE=false
 
 ### **Database Schema Design**
 
-The application uses a sophisticated relational schema optimized for construction workflows:
+The application uses a relational schema optimized for construction workflows:
 
 ```typescript
 // Core entity relationships
@@ -768,15 +773,7 @@ const supportedLanguages = ['en', 'de'];
    - Conflict resolution UI for simultaneous edits
    - User presence indicators on floor plans
 
-2. **Advanced Testing**
-   ```bash
-   # Current: Basic test setup
-   # Better: Comprehensive test coverage
-   npm run test:integration  # Database & services integration tests  
-   npm run test:e2e      # End-to-end user workflows
-   ```
-
-3. **Production Infrastructure**
+2. **Production Infrastructure**
    - Docker containerization
    - CI/CD pipeline with GitHub Actions
    - Performance monitoring and analytics
