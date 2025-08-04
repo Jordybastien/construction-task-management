@@ -5,15 +5,16 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npm run build-storybook:safe",
+    "build": "vite build && npm run build-storybook:safe && npm run move-storybook",
     "lint": "eslint .",
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "build:analyze": "vite build --mode analyze && npx vite-bundle-analyzer dist",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "build-storybook:safe": "node --version | grep -E 'v(2[0-9]|[3-9][0-9])' && npm run build-storybook || echo 'Skipping Storybook build - Node.js 20+ required'"
+    "build-storybook": "STORYBOOK_BASE_URL=/storybook/ storybook build --output-dir storybook-static",
+    "build-storybook:safe": "node --version | grep -E 'v(2[0-9]|[3-9][0-9])' && npm run build-storybook || echo 'Skipping Storybook build - Node.js 20+ required'",
+    "move-storybook": "test -d storybook-static && mv storybook-static dist/storybook || echo 'No storybook-static directory found'"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",

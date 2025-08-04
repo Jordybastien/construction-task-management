@@ -5,6 +5,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/storybook",
+      "destination": "/storybook/index.html"
+    },
+    {
       "source": "/storybook/(.*)",
       "destination": "/storybook/$1"
     },

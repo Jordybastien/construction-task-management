@@ -20,6 +20,11 @@ const config: StorybookConfig = {
       disableSourcemaps: true,
     }
   },
+  // Fix for Vercel deployment - set base URL for assets
+  managerHead: (head) => `
+    ${head}
+    <base href="/storybook/" />
+  `,
   // Hack for translation, this should've been fixed in the component level
   viteFinal: async (config) => {
     config.resolve = config.resolve || {};
@@ -27,6 +32,12 @@ const config: StorybookConfig = {
       ...config.resolve.alias,
       'react-i18next': require.resolve('./i18n.ts')
     };
+    
+    // Set base path for production deployment
+    if (process.env.NODE_ENV === 'production' || process.env.STORYBOOK_BASE_URL) {
+      config.base = '/storybook/';
+    }
+    
     return config;
   }
 };
