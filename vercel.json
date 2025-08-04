@@ -1,0 +1,21 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": "vite",
+  "functions": {
+    "app/api/**/*.js": {
+      "runtime": "nodejs22.17.0"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/storybook/(.*)",
+      "destination": "/storybook/$1"
+    },
+    {
+      "source": "/((?!storybook).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
