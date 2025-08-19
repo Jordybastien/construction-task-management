@@ -47,7 +47,7 @@ const withApi = async <T>(
   fallbackFn?: (db: DatabaseServices) => Promise<T>
 ): Promise<T> => {
   // TODO: This is an ugly implementation but it's a short-circuit to this function to allow it to work fully offline on demand
-  if (import.meta.env.VITE_OFFLINE_MODE === 'true' && fallbackFn) {
+  if ((import.meta.env.VITE_OFFLINE_MODE === 'true' || !navigator.onLine) && fallbackFn) {
     try {
       const db = await ensureDatabaseInitialized();
       return await fallbackFn(db);

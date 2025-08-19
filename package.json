@@ -92,6 +92,7 @@
     "tw-animate-css": "^1.3.6",
     "vite": "^5.4.19",
     "vite-bundle-analyzer": "^1.1.0",
+    "vite-plugin-pwa": "^1.0.2",
     "vitest": "^3.2.4"
   },
   "engines": {
